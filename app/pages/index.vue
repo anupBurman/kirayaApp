@@ -1,6 +1,12 @@
 <script setup >
 import { useCounterStore } from '~/store/counter';
 const store = useCounterStore();
+useHead({
+  title: 'Welcome to Home Page',
+  meta: [
+    { name: 'description', content: 'This is Home page description for kiraya app.' },
+  ],
+})
 </script>
 
 <template>
