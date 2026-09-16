@@ -15,10 +15,10 @@ export default defineNuxtConfig({
        htmlAttrs: {
         lang: 'en',
       },
-      link: [{ rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css' }
+      link: [{ rel: 'stylesheet', href: '/bootstrap_5.3.8/bootstrap.min.css' }
       ],
 
-      script: [{ src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js' }],
+      script: [{ src: '/bootstrap_5.3.8/bootstrap.bundle.min.js' }],
     },
   },
 })
