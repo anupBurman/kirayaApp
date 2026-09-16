@@ -7,7 +7,9 @@ export default defineNuxtConfig({
     // ...
     '@pinia/nuxt',
   ],
-
+  css: [
+    '~/assets/css/main.css'
+  ],
   app: {
     head: {
        htmlAttrs: {

@@ -20,6 +20,26 @@
           <li>
             <NuxtLink to="/vision" class="nav-link"> Vision </NuxtLink>
           </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              Examples
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+           <li>
+            <NuxtLink to="/examples/reactives" class="nav-link"> Reactives </NuxtLink>
+          </li>
+          <li>
+            <NuxtLink to="/examples/apiCall" class="nav-link"> API call </NuxtLink>
+          </li>
+          <li>
+            <NuxtLink to="/examples/apiCall2" class="nav-link"> API call 2 </NuxtLink>
+          </li>
+          <li>
+            <NuxtLink to="/examples/signup" class="nav-link"> Signup </NuxtLink>
+          </li>
+            </ul>
+          </li>
 
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"

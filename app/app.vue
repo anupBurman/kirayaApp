@@ -5,7 +5,7 @@
 <template>
   <NuxtRouteAnnouncer />
   <NuxtLayout>
-    <div class="container">
+    <div >
       <NuxtPage />
     </div>
   </NuxtLayout>
@@ -23,4 +23,5 @@
   opacity: 0;
   filter: blur(1rem);
 } */
+
 </style>

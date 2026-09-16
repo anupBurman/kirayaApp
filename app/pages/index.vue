@@ -1,16 +1,21 @@
-<script setup >
+<script setup>
 import { useCounterStore } from '~/store/counter';
 const store = useCounterStore();
 useHead({
-  title: 'Welcome to Home Page',
-  meta: [
-    { name: 'description', content: 'This is Home page description for kiraya app.' },
-  ],
+    title: 'Welcome to Home Page',
+    meta: [
+        { name: 'description', content: 'This is Home page description for kiraya app.' },
+    ],
 })
+
+    
+onMounted(() =>{
+store.fetchUserProfile();
+})
+
 </script>
 
 <template>
-
     <div>
         <h1> Home Page </h1>
         <h3>
@@ -18,7 +23,6 @@ useHead({
         </h3>
         <h3>
             Random increment = {{ store.count }}
-
         </h3>
 
         <button class="btn btn-dark" @click="store.increment()"> Add Item </button>
@@ -27,8 +31,14 @@ useHead({
     </div>
     <ul>
         <li v-for="user in store.userdata" :key="user.user_id">
-           id: {{ user.user_id }}  email: {{ user.email }}
+            id: {{ user.user_id }} email: {{ user.email }}
         </li>
     </ul>
     
+    <ul>
+        <li v-for="(profiles, index) in store.profile" :key="index">
+            Name: {{ profiles.Name }} &nbsp; &nbsp;    Email: {{ profiles.email }}
+        </li>
+    </ul>
+
 </template>

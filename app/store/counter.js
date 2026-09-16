@@ -4,6 +4,12 @@ export const useCounterStore = defineStore('counter', {
         count: 0,
         userdata: null,
         massage: "some Problem in Server",
+
+        profile: null,
+        loading: 'loading...',
+        error: null,
+
+
     }),
     actions: {
         // since we rely on `this`, we cannot use an arrow function
@@ -19,7 +25,7 @@ export const useCounterStore = defineStore('counter', {
         async getUser(id) {
             try {
                 // const response = await fetch('https://jsonplaceholder.typicode.com/commentstss/3');
-                const response = await fetch('https://rentvent.store/api/all_users.php');
+                const response = await fetch('http://localhost/rental_app/api/all_users.php');
                 this.userdata = await response.json();
                 console.log(response)
 
@@ -35,8 +41,33 @@ export const useCounterStore = defineStore('counter', {
                 //     statusCode: 500,
                 //     statusMessage: 'Unable to read data'
                 // })
-                
+
             }
-        }
+        },
+
+        async fetchUserProfile(userId) {
+            this.loading = true;
+            this.error = null;
+
+            try {
+                // ✅ Use $fetch for global data fetching inside actions
+                const data = await $fetch('http://localhost/rental_app/api/all_users.php');
+                this.profile = data;
+            } catch (err) {
+                this.error = err.message || 'Failed to load user';
+            } finally {
+                this.loading = '';
+            }
+
+           
+                // const {data, error, pending} = await useFetch('http://localhost/rental_app/api/all_users.php')
+                // this.profile = data.value
+                // console.log(this.profile)
+            
+
+        },
+
+
     },
+
 })
