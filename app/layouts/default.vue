@@ -1,9 +1,9 @@
 <template>
-    <Topbar />
+    <!-- <Topbar /> -->
     <navigation />
-    <div class="hero-img px-5">
+    <!-- <div class="hero-img px-5">
         <h1> hero Image </h1>
-    </div>
+    </div> -->
     <slot />
 </template>
 <style lang="css" >

@@ -1,10 +1,5 @@
-<script setup>
 
-const { data, error, pending } = await useFetch('https://dummyjson.com/posts?limit=10')
-// const result = data.value;
-console.log(data.value.posts)
-</script>
-<singlePost/>
+<!-- <singlePost/> -->
 <template>
     <div class="py-4">
         <h1> All posts </h1>
@@ -18,3 +13,10 @@ console.log(data.value.posts)
       </div>
 
 </template>
+<script setup>
+
+
+const { data, error, pending } = await useFetch('https://dummyjson.com/posts?limit=10')
+// const result = data.value;
+console.log(data.value.posts)
+</script>

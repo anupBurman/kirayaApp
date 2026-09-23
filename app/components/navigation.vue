@@ -96,7 +96,7 @@
                         <a class="nav-link"> <NuxtLink to="/samples"> Samples </NuxtLink> </a>
                     </li> -->
           <li class="nav-item" @click="hideMenu()">
-            <a class="nav-link"> <NuxtLink to="/add_property"> Add Property </NuxtLink> </a>
+            <a class="nav-link"> <NuxtLink to="/addPropertyBtn"> Add Property </NuxtLink> </a>
           </li>
 
           <!-- <li class="nav-item" @click="hideMenu($event)">
@@ -104,7 +104,7 @@
                     </li> -->
 
           <li class="nav-item" @click="hideMenu()">
-            <a class="nav-link"> <NuxtLink to="/myProperty">My Properties </NuxtLink> </a>
+            <a class="nav-link"> <NuxtLink to="/myProperties">My Properties </NuxtLink> </a>
           </li>
           <li class="nav-item" @click="hideMenu()">
             <a class="nav-link"> <NuxtLink to="/all_tenents"> All Tenents </NuxtLink> </a>
@@ -209,7 +209,8 @@ onMounted(() => {
     router.push('/login')
   } else {
     const localUserParse = JSON.parse(localUser)
-    router.push('/') // Ensure 'HomePage' page/route exists
+    // router.push('/myProperties') 
+    // Ensure 'HomePage' page/route exists
     loginLink.value = false
     logout.value = true
     register.value = false

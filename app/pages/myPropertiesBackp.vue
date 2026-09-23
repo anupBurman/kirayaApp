@@ -4,10 +4,10 @@
 
         <AddProperty v-if="noProp" />
 
-        <div class="row py-4 d-flex justify-content-center">
+           <div class="row py-4 d-flex justify-content-center">
 
-            <div class="col-lg-3 text-start card_wrap pb-3"  >
-                <!-- <NuxtLink :to="taburl + data.id">
+            <div class="col-lg-3 text-start card_wrap pb-3" v-for="(data, index) in response" :key="index" >
+                <NuxtLink :to="taburl + data.id">
                     <div class="card">
                         <img :src="basePath + data.image_path" class="card-img-top p-3" alt="image">
                         <div class="card-body pt-0">
@@ -15,24 +15,24 @@
                             <p class="card-text">{{ data.address }} {{ data.prop_city }} </p>
                         </div>
                     </div>
-                </NuxtLink> -->
+                </NuxtLink>
 
 
                 <div class="three_dots dropdown px-1" id="edit_prop">
                     <i class="fa fa-list-ul" id="dropdownMenuButton1" data-bs-toggle="dropdown"></i>
                     <ul class="dropdown-menu bg_purple" aria-labelledby="dropdownMenuButton1">
                         <li>
-                            <!-- <a class="dropdown-item" href="#">
-                                <router-link :to="`/edit_property/` + data.id">
+                            <a class="dropdown-item" href="#">
+                                <NuxtLink :to="`/edit_property/` + data.id">
                                     <i class="fa fa-pencil-square  pe-2" aria-hidden="true"></i> Edit Property
-                                </router-link>
-                            </a> -->
+                                </NuxtLink>
+                            </a>
                         </li>
                         <li>
                             <a class="dropdown-item" href="#">
-                                <!-- <router-link :to="`/delete_property/` + data.id" @click="deleteTenent(data.id)" >
+                                <NuxtLink :to="`/delete_property/` + data.id" @click="deleteTenent(data.id)" >
                                     <i class="fa fa-trash clr_orange pe-2" aria-hidden="true"></i> Delete Property
-                                </router-link> -->
+                                </NuxtLink>
                             </a>
                         </li>
                     </ul>
@@ -44,7 +44,7 @@
                 <h6 class="alert alert-success" v-if="successMsg"> Updated Successfully !! </h6>
                 <span class="loader" v-if="loader"></span>
             </div>
-        </div>
+        </div>   
     </div>
 </template>
 
@@ -53,15 +53,14 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 
-
-// import Swal from 'sweetalert2';
+import Swal from 'sweetalert2';
 // import AddProperty from './AddProperty.vue';
 
 // Router setup
 const router = useRouter();
 
 // State reactive variables (replacing data())
-const taburl = ref('/my_properties_detail/');
+const taburl = ref('/propertyDetails/');
 const buildingName = ref('');
 const propCity = ref('');
 const propAddress = ref('');
@@ -69,9 +68,9 @@ const noProp = ref('');
 const response = ref([]);
 const loader = ref(false);
 const successMsg = ref('');
-const basePath = ref('https://rentvent.store/api/');
+const basePath = ref('http://localhost/rental_app/api/');
 const imagePath = ref('');
-const id = ref('');
+const id = ref();
 const usermail = ref('');
 
 // Methods
@@ -95,6 +94,7 @@ const postData = async () => {
         loader.value = false;
         response.value = data;
         noProp.value = data.length === 0 ? true : '';
+        console.log(data)
 
     } catch (error) {
         loader.value = false; // Ensures loader turns off on failure
@@ -105,42 +105,50 @@ const postData = async () => {
 
 
 // DELETE ALL TENENT DATA
-// const deleteTenent = async (propertyId) => {
-//     if (confirm('Do you really want to delete the property ? ')) {
-//         try {
-//             const Response3 = await axios({
-//                 method: 'post',
-//                 url: 'https://rentvent.store/api/delete_property.php',
-//                 data: {
-//                     propId: propertyId,
-//                 }
-//             });
-//             if (Response3.status === 200) {
-//                 Swal.fire({
-//                     icon: "success",
-//                     text: 'Tenent Data Deleted ',
-//                     showConfirmButton: false,
-//                     timer: 2000
-//                 }).then(() => {
-//                     router.push({ name: 'MyProperties' });
-//                 });
-//             } else {
-//                 console.log("something went wrong");
-//             }
-//         } catch (error) {
-//             console.error(error);
-//         }
-//     }
-// };
+
+const deleteTenent = async (propertyId) => {
+  if (confirm('Do you really want to delete the property?')) {
+    try {
+     
+      // $fetch parses JSON payloads automatically when passing an object to body
+      const response = await $fetch('http://localhost/rental_app/api/delete_property.php', {
+        method: 'POST',
+        body: {
+          propId: propertyId,
+        }
+      })
+
+      // Nuxt $fetch resolves directly to the parsed data if successful (status 200-299)
+      // If the backend returns standard HTTP success statuses:
+      Swal.fire({
+        icon: "success",
+        text: 'Tenant Data Deleted',
+        showConfirmButton: false,
+        timer: 2000
+      }).then(() => {
+        router.push({ name: 'MyProperties' })
+      })
+
+    } catch (error) {
+      // If the request fails (status 4xx/5xx), $fetch automatically throws an error
+      console.error("Something went wrong:", error)
+      Swal.fire({
+        icon: "error",
+        text: 'Failed to delete the property.'
+      })
+    }
+  }
+}
+;
 
 // Lifecycle Hooks (replacing mounted())
-// onMounted(() => {
-//     const localUser = localStorage.getItem("userinfo");
-//     if (localUser) {
-//         usermail.value = JSON.parse(localUser);
-//     }
-//     postData();
-// });
+onMounted(() => {
+    const localUser = localStorage.getItem("userinfo");
+    if (localUser) {
+        usermail.value = JSON.parse(localUser);
+    }
+    postData();
+});
 </script>
 
 <style scoped>
