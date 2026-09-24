@@ -312,8 +312,8 @@ const deleteTenent = async (tid) => {
 onMounted(() => {
   console.log(route.params.addRoom)
     postData();
-    // getAmount();
-    // receivedAmount();
+    getAmount();
+    receivedAmount();
 });
 
 onBeforeUpdate(() => {
@@ -323,4 +323,46 @@ onBeforeUpdate(() => {
     }
 });
 </script>
+<style scoped>
+.card_wrap .card {
+    border-radius: 9px;
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+    transition: all 0.5s;
+}
+
+.card_wrap .card:hover {
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px, rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+    transition: all 0.5s;
+}
+
+.prop_image {
+    width: 50px;
+    border: 1px solid gray;
+}
+
+.d_flex {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.rooms i {
+    font-size: 2rem;
+}
+
+a {
+    color: #333;
+}
+
+.alert-warning a :hover {
+    color: #ff944d;
+}
+
+.accordion-flush>.accordion-item>.accordion-header .accordion-button,
+.accordion-flush>.accordion-item>.accordion-header .accordion-button.collapsed {
+    background-color: antiquewhite;
+}
+</style>
+
 
