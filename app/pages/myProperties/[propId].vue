@@ -71,7 +71,7 @@
 
         <div class="p-3 bg-dark text-light text-start"> 
           Rooms/Flats - {{ room_countr }}
-          <NuxtLink to="/addRoom" v-if="AddRoom">
+          <NuxtLink :to="`/addRoom/${propId}`" v-if="AddRoom">
             <button class="btn btn-sm bg_purple text-white mx-lg-4 round">
               <i class="bi bi-plus-square-dotted"></i> Add
             </button>
@@ -157,6 +157,8 @@ const imagePath = ref('');
 const tabURL = ref('/addRoom/');
 const tabURL2 = ref('/add_shop/');
 const rowId = ref('');
+
+const propId = ref('')
 
 const errorAlert = ref('');
 const errorMessage = ref('');
@@ -310,7 +312,7 @@ const deleteTenent = async (tid) => {
 
 // Lifecycle hooks conversion
 onMounted(() => {
-  console.log(route.params.addRoom)
+  propId.value = route.params.propId;
     postData();
     getAmount();
     receivedAmount();

@@ -458,7 +458,7 @@ const previewImg = (e) => {
 };
 
 const fetchData = async () => {
-  rowId.value = route.params.propId;
+  rowId.value = route.params.slug;
   
   try {
     const res = await $fetch(`http://localhost/rental_app/api/my_properties_detail.php?id=`+ rowId.value , {

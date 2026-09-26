@@ -1,7 +1,8 @@
 <template>
   <div class="container-fluid">
     <!-- {{ response }} -->
-    <!-- {{ response2 }}  -->
+    <!-- {{ response2 }}  --> 
+
     <div class="row px-lg-5 mb-5 profile_comp">
       <div class="py-3">
         <!-- Replaced router-link with NuxtLink -->
@@ -24,7 +25,7 @@
             </div>
           </div>
           <div class="three_dots dropdown px-1">
-            <i class="fa fa-list-ul" id="dropdownMenuButton1" data-bs-toggle="dropdown"></i>
+            <i class="fa fa-list-ul" id="dropdownMenuButton1" data-bs-toggle="dropdown">=</i>
             <ul class="dropdown-menu bg_purple" aria-labelledby="dropdownMenuButton1">
               <li>
                 <div class="dropdown-item">
@@ -40,7 +41,7 @@
                 </a>
               </li>
               <li>
-                <a class="dropdown-item" href="#">
+                <a class="dropdown-item" href="#" @click.prevent="deleteBills()">
                   <i class="fa fa-trash clr_orange pe-2" aria-hidden="true"></i> Delete Bills
                 </a>
               </li>
@@ -273,7 +274,9 @@ const mm = ref('')
 const yy = ref('')
 const lastReading = ref('')
 const currentReading = ref('')
+const localUserId = ref('')
 const tenentId = ref('')
+const propId = ref('')
 const loader = ref('')
 const successAlert = ref(false)
 const errorAlert = ref(false)
@@ -292,9 +295,11 @@ const errorAlert = ref(false)
 const getTenentData = async () => {
   // Capture tenantId from current route parameters
   // const tId = route.params.tenentId
-  const tId = route.params.slug[1]
-  console.log(tId)
-  tenentId.value = tId
+  const tId = route.params.slug[1];
+  const pId = route.params.slug[0];
+  // console.log(tId)
+  tenentId.value = tId;
+  propId.value = pId;
 
   try {
     //  native Nuxt  $fetch API call
@@ -380,6 +385,7 @@ const deleteTenent = async () => {
       await $fetch('http://localhost/rental_app/api/delete_tenent.php', {
         method: 'POST',
         body: {
+          propId: propId.value,
           tenentId: tenentId.value,
         }
       })
@@ -400,8 +406,35 @@ const deleteTenent = async () => {
   }
 }
 
+const deleteBills = async () => {
+  if (confirm('Do you really want to delete Bills of This Tenent ?')) {
+    try {
+      //  native Nuxt 3 $fetch API call
+      await $fetch('http://localhost/rental_app/api/delete_bills.php', {
+        method: 'POST',
+        body: {
+          userId: localUserId.value,
+          tenentId: tenentId.value,
+        }
+      })
+      // Alert & Route redirection logic updated for Nuxt 3
+      Swal.fire({
+        icon: "success",
+        text: 'Tenent Bills Data Deleted ',
+        showConfirmButton: false,
+        timer: 2000
+      }).then(() => {
+        router.push('/myProperties')
+      })
+
+    } catch (error) {
+      console.error("something went wrong", error)
+    }
+  }
+}
+
 const makePdf = (evnt) => {
-  console.log(evnt)
+  // console.log(evnt)
   const page = document.getElementById('tbl')
   if (page) {
     html2PDF(page, {
@@ -415,6 +448,8 @@ const makePdf = (evnt) => {
 
 // Replaces the Options API mounted() lifecycle hook
 onMounted(async () => {
+  const user_id = localStorage.getItem("userId");
+  localUserId.value = JSON.parse(user_id)
   await getTenentData()
   await getRentReceived()
 })

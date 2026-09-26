@@ -126,7 +126,7 @@ const deleteTenent = async (propertyId) => {
         showConfirmButton: false,
         timer: 2000
       }).then(() => {
-        router.push({ name: 'MyProperties' })
+        router.push('/myProperties')
       })
 
     } catch (error) {
@@ -137,6 +137,8 @@ const deleteTenent = async (propertyId) => {
         text: 'Failed to delete the property.'
       })
     }
+  }else{
+    router.push('/myProperties')
   }
 }
 ;

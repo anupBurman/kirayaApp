@@ -13,6 +13,7 @@
 
 </template>
 <style lang="css">
+
 /* Fade and Blur Transition */
 /* .page-enter-active,
 .page-leave-active {

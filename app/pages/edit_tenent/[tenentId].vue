@@ -36,7 +36,7 @@
                                 placeholder="Enter Room/Flat Number">
                         </div> -->
                         <div class="row">
-                            <div class="col-lg-6 form-group ">
+                            <div class="col-lg-6 form-group d-none ">
                                 <span> Tenent ID </span>
                                 <input type="text" v-model="tenent_id" name="tenent_id" class="form-control"
                                     placeholder="Enter Room/Flat Number" readonly>

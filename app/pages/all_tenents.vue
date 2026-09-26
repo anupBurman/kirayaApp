@@ -17,7 +17,7 @@
             <th scope="col">Rent Amount</th>
             <th scope="col">Last Rent Received</th>
             <th scope="col">Next Due Date Status</th>
-            
+
           </tr>
         </thead>
         <tbody>
