@@ -19,20 +19,22 @@
                 </div>
 
                 <form @submit.prevent="logIn">
-                    <div class="form-group ">
+                    <div class="form-group floating-group">
+                        
+                        <input type="email" placeholder="" v-model="email" class="form-control" required>
                         <label>
                             <i class="fa fa-envelope" aria-hidden="true"></i>
-                            Email*
+                           Enter Your Email*
                         </label>
-                        <input type="email" placeholder="Enter Your Name" v-model="email" class="form-control" required>
                     </div>
-                    <div class="form-group ">
-                        <label>
-                            <i class="fa fa-unlock-alt" aria-hidden="true"></i>
-                            Password*
-                        </label>
+                    <div class="form-group floating-group">
+                        
                         <input type="password" maxlength="12" minlength="6" v-model="password" class="form-control"
-                            required placeholder="Enter Password">
+                            required placeholder="">
+                            <label>
+                            <i class="fa fa-unlock-alt" aria-hidden="true"></i>
+                           Enter Password*
+                        </label>
                     </div>
                     <div class="form-group text-secondary">
                         <input class="form-check-input me-1" type="checkbox" id="user_licence" v-model="userLicence" />
