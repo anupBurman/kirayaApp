@@ -1,68 +1,3 @@
-<!-- <template>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">Navbar</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
-        aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <NuxtLink to="/" class="nav-link"> Home </NuxtLink>
-          </li>
-          <li>
-            <NuxtLink to="/about" class="nav-link"> About </NuxtLink>
-          </li>
-          <li>
-            <NuxtLink to="/products" class="nav-link"> Products </NuxtLink>
-          </li>
-          <li>
-            <NuxtLink to="/vision" class="nav-link"> Vision </NuxtLink>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-              data-bs-toggle="dropdown" aria-expanded="false">
-              Examples
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <li>
-                <NuxtLink to="/examples/reactives" class="nav-link"> Reactives </NuxtLink>
-              </li>
-              <li>
-                <NuxtLink to="/examples/apiCall" class="nav-link"> API call </NuxtLink>
-              </li>
-              <li>
-                <NuxtLink to="/examples/apiCall2" class="nav-link"> API call 2 </NuxtLink>
-              </li>
-              <li>
-                <NuxtLink to="/examples/signup" class="nav-link"> Signup </NuxtLink>
-              </li>
-
-            </ul>
-          </li>
-
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-              data-bs-toggle="dropdown" aria-expanded="false">
-              Dropdown link
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <li>
-                <NuxtLink to="/posts/" class="nav-link"> All posts </NuxtLink>
-              </li>
-            </ul>
-          </li>
-          <li>
-            <NuxtLink to="/login" class="nav-link"> Login </NuxtLink>
-          </li>
-        </ul>
-
-      </div>
-    </div>
-  </nav>
-</template> -->
-
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark bg_purple " v-if="navLinks">
     <div class="container-fluid ">
@@ -78,62 +13,41 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link"> <NuxtLink to="/" @click="refresh()">Home</NuxtLink> </a>
+            <a class="nav-link">
+              <!-- <NuxtLink to="/" @click="refresh()">Home</NuxtLink> -->
+              <NuxtLink to="/" >Home</NuxtLink>
+            </a>
           </li>
-          <!-- <li class="nav-item" @click="hideMenu($event)">
-                        <a class="nav-link"> <NuxtLink to="/ContactUs"> Contact Us </NuxtLink> </a>
-                    </li> -->
-          <!-- <li class="nav-item" @click="hideMenu()">
-                        <a class="nav-link"> <NuxtLink to="/Tab-View"> Tab View </NuxtLink> </a>
-                    </li> -->
-          <!-- <li class="nav-item" @click="hideMenu()">
-                        <a class="nav-link"> <NuxtLink to="/add_property"> Post </NuxtLink> </a>
-                    </li> -->
-          <!-- <li class="nav-item" @click="hideMenu($event)">
-                        <a class="nav-link"> <NuxtLink to="/ref"> Ref </NuxtLink> </a>
-                    </li> -->
-          <!-- <li class="nav-item" @click="hideMenu()">
-                        <a class="nav-link"> <NuxtLink to="/samples"> Samples </NuxtLink> </a>
-                    </li> -->
-          <li class="nav-item" @click="hideMenu()">
-            <a class="nav-link"> <NuxtLink to="/addPropertyBtn"> Add Property </NuxtLink> </a>
-          </li>
-
-          <!-- <li class="nav-item" @click="hideMenu($event)">
-                        <a class="nav-link"> <NuxtLink to="/imagepost"> test </NuxtLink> </a>
-                    </li> -->
 
           <li class="nav-item" @click="hideMenu()">
-            <a class="nav-link"> <NuxtLink to="/myProperties">My Properties </NuxtLink> </a>
+            <a class="nav-link">
+              <NuxtLink to="/addProperty"> Add Property </NuxtLink>
+            </a>
+          </li>
+
+          <li class="nav-item" @click="hideMenu()">
+            <a class="nav-link">
+              <NuxtLink to="/myProperties">My Properties </NuxtLink>
+            </a>
           </li>
           <li class="nav-item" @click="hideMenu()">
-            <a class="nav-link"> <NuxtLink to="/all_tenents"> All Tenents </NuxtLink> </a>
+            <a class="nav-link">
+              <NuxtLink to="/all_tenents"> All Tenents </NuxtLink>
+            </a>
           </li>
 
-
-          <!-- <div class="dropdown">
-                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            Profile
-                        </a>
-                        <ul class="dropdown-menu bg-dark bg_purple">
-                            <li @click="refresh()" style="display:none;">
-                                <a class="nav-link"> <NuxtLink to="/MultiSlider"> Multi Slider </NuxtLink> </a>
-                            </li>
-                            <li v-for="(data, index) in profiles" :key="index" @click="hideMenu2($event)">
-                                <a class="dropdown-item "> <NuxtLink :to="/profile/ + data"> {{ data }}</NuxtLink>
-                                </a>
-                            </li>
-                        </ul>
-                    </div> -->
 
         </ul>
         <ul class="navbar-nav ps-lg-5 ms-lg-5 pb-3">
           <li class="nav-item px-2" v-if="loginLink" @click="hideMenu()">
-            <a class="dropdown-item"> <NuxtLink to="/login"> login</NuxtLink> </a>
+            <a class="dropdown-item">
+              <NuxtLink to="/login"> login</NuxtLink>
+            </a>
           </li>
           <li class="nav-item px-2" v-if="register" @click="hideMenu()">
-            <a class="dropdown-item"> <NuxtLink to="/register"> Register</NuxtLink> </a>
+            <a class="dropdown-item">
+              <NuxtLink to="/register"> Register</NuxtLink>
+            </a>
           </li>
           <li class="nav-item px-2">
             <a class="dropdown-item log_out" v-if="username"> {{ username }} ! </a>
@@ -209,8 +123,9 @@ onMounted(() => {
     router.push('/login')
   } else {
     const localUserParse = JSON.parse(localUser)
-    // router.push('/myProperties') 
     // Ensure 'HomePage' page/route exists
+    router.push('/') 
+    
     loginLink.value = false
     logout.value = true
     register.value = false

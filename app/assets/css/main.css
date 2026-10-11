@@ -45,6 +45,16 @@
     background: linear-gradient(0deg, #60439d 50%, #7e59cb);
 } */
 
+div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-confirm) {
+  border-radius: 50px !important;
+}
+div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-cancel) {
+  border-radius: 50px !important;
+}
+div:where(.swal2-container) button:where(.swal2-styled) {
+  padding: .325em 1.1em !important;
+}
+
 .text_info {
   color: #0d6efd;
 }
@@ -66,18 +76,79 @@ h2 {
   background-size: cover;
 }
 
-.form-group label {
-  font-weight: 700;
-}
-
-.form-group label i {
-  color: #d15834;
-  padding-right: 5px;
-}
-
 .form-group {
-  margin-bottom: 1rem;
+  margin-bottom: 1.4rem;
 }
+
+.form-group .form-select,
+.form-group .form-control {
+  padding-bottom: .525rem;
+  padding-top: .525rem;
+}
+
+/* Chrome, Safari, Edge, Opera */
+/* hide up and Down Arrow icon from 'input type number' */
+.no-spinners::-webkit-outer-spin-button,
+.no-spinners::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.no-spinners[type='number'] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* ========= Floating labels Input fields and select fields ======== */
+
+/* Container spacing to allow room above the element */
+.floating-group {
+  position: relative;
+  margin-top: 10px;
+}
+
+/* Base style for labels across inputs and selects */
+.floating-group label {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  color: #6c757d;
+  /* Bootstrap 4 muted text color */
+  transition: 0.2s ease all;
+  pointer-events: none;
+  font-size: 1rem;
+  border-radius: 5px;
+  padding: 0px 7px 0px 7px;
+}
+
+/* --- TRIGGER RULES --- */
+
+/* 1. When focused (Works for both inputs and selects) */
+.floating-group input:focus~label,
+.floating-group select:focus~label,
+
+/* 2. For text fields when they have typed content */
+.floating-group input:not(:placeholder-shown)~label,
+
+/* 3. For select fields when a valid option (non-empty value) is selected */
+.floating-group select:not(:invalid)~label {
+  top: -17px;
+  /* Sits cleanly on top of the input field border */
+  transform: translateY(0) scale(0.85);
+  left: -5px;
+  font-weight: 500;
+  background-color: #d9d0eb;
+}
+
+/* Keep text muted when field is blurred but still contains text/valid selection */
+.floating-group input:not(:focus):not(:placeholder-shown)~label,
+.floating-group select:not(:focus):not(:invalid)~label {
+  color: #575449;
+}
+
+
 
 /* ============ custom styling ============= */
 
@@ -125,7 +196,6 @@ h3 {
   font-family: Georgia, serif;
   text-align: center;
 }
-
 
 .text_bold {
   font-weight: 600;
@@ -231,7 +301,7 @@ button.btn:hover {
 }
 
 .form-group label {
-  font-weight: 700;
+  font-weight: 500;
   /* color: #731eba ; */
 }
 
@@ -249,12 +319,19 @@ button.btn:hover {
   color: #d15834;
 }
 
+.info {
+  position: absolute;
+  top: -18px;
+  z-index: 3;
+  left: 90%;
+}
+
 /*  custom tooltip */
 .info_card {
   position: absolute;
   width: 400px;
-  margin-left: 7%;
-  margin-top: -140px;
+  margin-left: -400px;
+  margin-top: -120px;
   padding: 0.8rem;
   display: none;
   font-weight: 500;
@@ -265,8 +342,6 @@ button.btn:hover {
   cursor: pointer;
   transition: all 0.5s;
 }
-
-
 
 /* ============/////////////////============ */
 
@@ -394,9 +469,10 @@ button.btn:hover {
   }
 
   .info_card {
+    position: absolute;
     width: 300px;
-    margin-left: 0%;
-    margin-top: -50%;
+    margin-left: -300px;
+    top: 0px;
   }
 
   .loader-absolute {
@@ -409,8 +485,12 @@ button.btn:hover {
     font-size: 0.8rem;
   }
 
+  .file_upload p {
+    font-size: 14px;
+  }
+
   .info_card {
     width: 280px;
-    margin-left: 0%;
+    margin-left: -239px;
   }
 }

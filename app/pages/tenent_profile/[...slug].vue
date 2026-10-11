@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
     <!-- {{ response }} -->
-    <!-- {{ response2 }}  --> 
+    <!-- {{ response2 }}  -->
 
     <div class="row px-lg-5 mb-5 profile_comp">
       <div class="py-3">
@@ -25,7 +25,7 @@
             </div>
           </div>
           <div class="three_dots dropdown px-1">
-            <i class="fa fa-list-ul" id="dropdownMenuButton1" data-bs-toggle="dropdown">=</i>
+            <i class="fa fa-list-ul" id="dropdownMenuButton1" data-bs-toggle="dropdown"></i>
             <ul class="dropdown-menu bg_purple" aria-labelledby="dropdownMenuButton1">
               <li>
                 <div class="dropdown-item">
@@ -68,7 +68,10 @@
           <span>Monthly Rent Amount</span> <span>{{ response.rent_amount }}</span>
         </div>
         <div class="d_flex_between">
-          <span>Electricity</span> <span>{{ response.bijli_bill }}</span>
+          <span>Electricity</span> <span> {{ response.bijli_bill }}</span>
+        </div>
+        <div v-if="response.e_per_unit > 1" class="d_flex_between">
+          <span>Per Unit Charge </span> <span> Rs. {{ response.e_per_unit }}</span>
         </div>
         <hr>
         <div class="d_flex_between">
@@ -147,13 +150,13 @@
             <div class="d_flex_between">
               <span>Electricity Charge</span>
               <span class="text_bold">
-                {{ (data.current_reading - data.last_reading) * response.e_per_unit }}
+                {{ ((data.current_reading - data.last_reading) * response.e_per_unit) }}
               </span>
             </div>
             <div class="d_flex_between mb-5 pb-4">
               <span> Monthly Mantenece Charges </span>
               <span class="text_bold">
-                
+
                 {{ response.mantenece_charge }}
               </span>
             </div>
@@ -218,18 +221,19 @@
               <!-- <span> Total: </span> -->
               <!-- IF ELECTRICITY CHARGES ACCORDING TO PER UNIT WISE then it will show -->
               <span v-if="response.e_per_unit > 1">
-                Rs. {{ parseInt(response.rent_amount) + ((data.current_reading - data.last_reading) *
+                Rs. {{ subTotal = parseInt(response.rent_amount) + ((data.current_reading - data.last_reading) *
                   response.e_per_unit) + parseInt(response.mantenece_charge) }}
+
               </span>
 
               <!-- IF ELECTRICITY CHARGES BY GOVT. METER  -->
               <span v-if="response.bijli_bill === 'govt billing'">
-               Rs. {{ parseInt(response.e_fixed_monthly) + parseInt(response.rent_amount) +
+                Rs. {{ subTotal = parseInt(response.e_fixed_monthly) + parseInt(response.rent_amount) +
                   parseInt(response.mantenece_charge) }}
               </span>
 
               <span v-if="response.e_fixed_monthly > 10">
-              Rs. {{ subTotal = parseInt(response.e_fixed_monthly) + parseInt(data.recieved_amount) +
+                Rs. {{ subTotal = parseInt(response.e_fixed_monthly) + parseInt(data.recieved_amount) +
                   parseInt(response.mantenece_charge) }}
               </span>
             </div>
@@ -254,12 +258,15 @@
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Swal from 'sweetalert2'
-
 import html2PDF from 'jspdf-html2canvas'
+import { useDataStore } from '@/store/preData';
 
+
+const store = useDataStore();
 // Initialize Nuxt Router & Route utilities
 const route = useRoute()
 const router = useRouter()
+
 
 // Reactive state variables (Replaces Options API data())
 const response = ref([])
@@ -281,14 +288,8 @@ const loader = ref('')
 const successAlert = ref(false)
 const errorAlert = ref(false)
 
-// Computed property for subTotal logic found at the end of original getRentReceived
-// Note: Ensure `elecricityCharge` or `response.value.rent_amount` are defined/tracked properly.
-// const elecricityCharge = ref(0) 
-// Default fallback as commented out in your original code
-// const subTotal = computed(() => {
-//   const rent = response.value?.rent_amount ? parseInt(response.value.rent_amount) : 0
-//   return elecricityCharge.value + rent
-// })
+const subTotal = ref('')
+
 
 // Methods rewritten as standard JavaScript functions
 
@@ -303,7 +304,7 @@ const getTenentData = async () => {
 
   try {
     //  native Nuxt  $fetch API call
-    const data = await $fetch('http://localhost/rental_app/api/tenent_all_details.php', {
+    const data = await $fetch(store.apiBasePath + 'tenent_all_details.php', {
       method: 'POST',
       body: {
         id: tenentId.value,
@@ -329,7 +330,8 @@ const getTenentData = async () => {
 
 const getRentReceived = async () => {
   // Extract parameters from route context
-  const startDate = route.params.rent_start_date
+  //  const startDate = route.params.rent_start_date
+  const startDate = route.params.slug[2]
   console.log(startDate)
   if (startDate) {
     const [ddd, mmm, yyy] = startDate.split('-')
@@ -337,7 +339,6 @@ const getRentReceived = async () => {
     monthh.value = mmm
     Yearr.value = yyy
   }
-
   // Current billing date breakdown
   const d = new Date()
   const year = d.getFullYear()
@@ -347,7 +348,7 @@ const getRentReceived = async () => {
 
   try {
     //  with native Nuxt $fetch API call
-    const data2 = await $fetch('http://localhost/rental_app/api/electric_water_bill.php', {
+    const data2 = await $fetch(store.apiBasePath + 'electric_water_bill.php', {
       method: 'POST',
       body: {
         id: tenentId.value,
@@ -361,7 +362,6 @@ const getRentReceived = async () => {
       mm.value = currentMonth
       dd.value = day
       yy.value = year
-
       // Verification logic when next due date completes
       if (currentMonth < 10) currentMonth = '0' + currentMonth
       const plusOne = parseInt(currentMonth) + 1
@@ -378,46 +378,53 @@ const getRentReceived = async () => {
   }
 }
 
-const deleteTenent = async () => {
-  if (confirm('Do you really want to delete this data ?')) {
-    try {
-      //  native Nuxt 3 $fetch API call
-      await $fetch('http://localhost/rental_app/api/delete_tenent.php', {
-        method: 'POST',
-        body: {
-          propId: propId.value,
-          tenentId: tenentId.value,
-        }
-      })
-
-      // Alert & Route redirection logic updated for Nuxt 3
-      Swal.fire({
-        icon: "success",
-        text: 'Tenent Data Deleted ',
-        showConfirmButton: false,
-        timer: 2000
-      }).then(() => {
-        router.push('/myProperties')
-      })
-
-    } catch (error) {
-      console.error("something went wrong", error)
-    }
-  }
+const deleteTenent = () => {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to get data of this Tanent again!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Yes, delete it!"
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      try {
+        //  native Nuxt 3 $fetch API call
+        await $fetch(store.apiBasePath + 'delete_tenent.php', {
+          method: 'POST',
+          body: {
+            propId: propId.value,
+            tenentId: tenentId.value,
+          }
+        })
+        Swal.fire({
+          icon: "success",
+          text: 'Tenent Data Deleted ',
+          showConfirmButton: false,
+          timer: 2000
+        }).then(() => {
+          router.push('/myProperties')
+        })
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          text: 'Something went wrong.'
+        });
+      }
+    };
+  });
 }
 
 const deleteBills = async () => {
   if (confirm('Do you really want to delete Bills of This Tenent ?')) {
     try {
       //  native Nuxt 3 $fetch API call
-      await $fetch('http://localhost/rental_app/api/delete_bills.php', {
+      await $fetch(store.apiBasePath + 'delete_bills.php', {
         method: 'POST',
         body: {
           userId: localUserId.value,
           tenentId: tenentId.value,
         }
       })
-      // Alert & Route redirection logic updated for Nuxt 3
       Swal.fire({
         icon: "success",
         text: 'Tenent Bills Data Deleted ',
@@ -426,9 +433,12 @@ const deleteBills = async () => {
       }).then(() => {
         router.push('/myProperties')
       })
-
     } catch (error) {
-      console.error("something went wrong", error)
+      Swal.fire({
+        icon: "error",
+        text: 'Something Went Wrong.'
+      });
+      // console.error("something went wrong", error)
     }
   }
 }

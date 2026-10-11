@@ -68,6 +68,9 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import Swal from 'sweetalert2';
+import { useDataStore } from '@/store/preData';
+
+const store = useDataStore();
 
 definePageMeta({
     layout:'custom'
@@ -112,7 +115,7 @@ const postData = async () => {
 
   try {
     // $fetch call replacing axios
-    const response = await $fetch('http://localhost/rental_app/api/users.php', {
+    const response = await $fetch(store.apiBasePath + 'users.php', {
       method: 'POST',
       body: {
         name: name.value,

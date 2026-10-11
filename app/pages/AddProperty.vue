@@ -1,7 +1,8 @@
 <template>
-  <div class="container-fluid template" style="background-image: url('/images/yyy.jpg'); background-size: cover; background-blend-mode: overlay;">
+  <div class="container-fluid template"
+    style="background-image: url('/images/yyy.jpg'); background-size: cover; background-blend-mode: overlay;">
     <h2 class="pb-4"><span>Add Building Or House</span></h2>
-
+    
     <div class="row px-lg-5 rounded add_property">
       <div class="col-lg-4 px-0 rounded"></div>
 
@@ -9,27 +10,32 @@
         <div class="form p-4">
           <form id="form" @submit.prevent="btnUpload">
             <input type="hidden" name="user_email" class="form-control" v-model="usermail" required>
-            
+
             <!-- 1 -->
-            <div class="form-group">
-              <input type="text" name="building_name" class="form-control" v-model="buildingName" placeholder="Property/Building Name" required>
+            <div class="form-group floating-group">
+              <input type="text" name="building_name" class="form-control" v-model="buildingName"
+                placeholder="" required>
+                <label>Property/Building Name</label>
             </div>
 
             <!-- 2 -->
-            <div class="form-group">
-              <input type="text" class="form-control" name="address" v-model="address" placeholder="Property Address*" required>
+            <div class="form-group floating-group">
+              <input type="text" class="form-control" name="address" v-model="address" placeholder=""
+                required>
+                 <label>Property Address*</label>
             </div>
 
             <!-- 3 -->
-            <div class="form-group">
-              <select class="form-select" name="prop_city" aria-label="Default select example" v-model="propCity">
-                <option disabled value="">Select Property Location*</option>
+            <div class="form-group floating-group">
+              <select class="form-select" name="prop_city" aria-label="Default select example" v-model="propCity" required>
+                <option disabled hidden selected  value=""></option>
                 <option :value="data" v-for="(data, index) in states" :key="index">{{ data }}</option>
               </select>
+               <label>Select Property Location*</label>
             </div>
 
             <!-- 4 -->
-            <div class="form-group file_upload">
+            <div class="form-group bg-light rounded file_upload">
               <!-- Notice: Changed ref to fileInput to match the Vue 3 Composition API setup -->
               <input type="file" ref="fileInput" accept="image/*" class="form-control w-75" @change="previewImg">
               <div class="w-25 p-2 bg-light rounded" v-if="img_url">
@@ -40,17 +46,17 @@
             <hr>
             <h5>Select Quantity of Rooms/Flats or Shops</h5>
             <div class="form-group file_upload">
-              <div>
+              <div >
                 <p class="my-0">Quantity of Flats/Rooms</p>
-                <button type="button" class="btn btn-sm btn-secondary px-3" @click="decrement">-</button>
+                <button type="button" class="btn btn-sm btn-secondary px-3 " @click="decrement">-</button>
                 <input type="text" name="room_countr" v-model="roomCountr" class="w-25 py-0 px-2 text-center" />
-                <button type="button" class="btn btn-sm btn-dark px-3" @click="increment">+</button>
+                <button type="button" class="btn btn-sm btn-dark px-3 " @click="increment">+</button>
               </div>
               <div>
                 <p class="my-0">Quantity of Shops</p>
-                <button type="button" class="btn btn-sm btn-secondary px-3" @click="decrement2">-</button>
+                <button type="button" class="btn btn-sm btn-secondary  px-3" @click="decrement2">-</button>
                 <input type="text" name="shop_countr" v-model="shopCountr" class="w-25 py-0 px-2 text-center" />
-                <button type="button" class="btn btn-sm btn-dark px-3" @click="increment2">+</button>
+                <button type="button" class="btn btn-sm btn-dark  px-3" @click="increment2">+</button>
               </div>
             </div>
 
@@ -77,7 +83,9 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import Swal from 'sweetalert2'
+import { useDataStore } from '@/store/preData';
 
+const store = useDataStore();
 // Configuration
 const basepath = 'http://localhost/rental_app';
 const router = useRouter()
@@ -127,7 +135,6 @@ const previewImg = (e) => {
 const btnUpload = async () => {
   submitBtn.value = false
   loader.value = true
-
   const formElement = document.getElementById('form')
   const formData = new FormData(formElement)
 
@@ -135,10 +142,9 @@ const btnUpload = async () => {
   if (fileInput.value && fileInput.value.files[0]) {
     formData.append('file', fileInput.value.files[0])
   }
-
   try {
     // Axios completely stripped out. $fetch auto-manages proper headers for FormData payload
-    const data = await $fetch('http://localhost/rental_app/api/file_upload.php', {
+    const data = await $fetch(store.apiBasePath + 'file_upload.php', {
       method: 'POST',
       body: formData
     })
@@ -158,17 +164,15 @@ const btnUpload = async () => {
       }).then(() => {
         router.push('/myProperties')
       })
-
       uploadedImage.value = `<img src="${basepath}${data.image}" class="img-thumbnail" width="300" />`
-      
       // Clean up input value
       if (fileInput.value) fileInput.value.value = ''
     }
   } catch (error) {
-    console.error('Upload error details:', error)
+    // console.error('Upload error details:', error)
     Swal.fire({
       icon: 'error',
-      text: 'Something went wrong during the file upload process.'
+      text: 'Something went wrong.'
     })
     submitBtn.value = true
     loader.value = false
@@ -186,18 +190,30 @@ onMounted(() => {
 
 <style scoped>
 .preview_img {
-    max-width: 80px;
-    max-height: 65px;
-    min-height: 60px;
+  max-width: 80px;
+  max-height: 65px;
+  min-height: 60px;
 }
 
 .file_upload {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
+
 .file_upload input {
-    padding: 1.6rem;
+  padding: 1.6rem;
+  border-color: none;
+}
+
+/* .file_upload button.btn {
+  box-shadow: unset;
+  font-weight: 800;
+  font-size: 22px;
+} */
+
+button + input[type=text]{
+  border-color:unset;
 }
 </style>

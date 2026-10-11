@@ -1,9 +1,9 @@
 <template>
     <div class="container-fluid template"
         style="background-image: url('/images/yyy.jpg');  background-size: cover; background-blend-mode: overlay; ">
-        <h2 class="pb-4"> 
-            <span> Edit Property / </span> 
-            <span class="btn bg_purple text-light rounded btn-sm py-0">{{ propId }}</span> 
+        <h2 class="pb-4">
+            <span> Edit Property / </span>
+            <span class="btn bg_purple text-light rounded btn-sm py-0">{{ propId }}</span>
         </h2>
 
         <div class="row px-lg-5 rounded add_property ">
@@ -21,26 +21,26 @@
                         </div>
 
                         <!-- 1. Property Name -->
-                        <div class="form-group ">
-                            <label> Property Name </label>
+                        <div class="form-group floating-group">
                             <input type="text" name="building_name" class="form-control"
-                                v-model="response.building_name" placeholder="Property/Building Name" required>
+                                v-model="response.building_name" placeholder="" required>
+                            <label> Property Name </label>
                         </div>
 
                         <!-- 2. Property Address -->
-                        <div class="form-group ">
-                            <label> Property Address </label>
+                        <div class="form-group floating-group">
                             <input type="text" class="form-control" name="address" v-model="response.address"
                                 placeholder="Property Address*" required>
+                            <label> Property Address </label>
                         </div>
 
                         <!-- 3. State -->
-                        <div class="form-group ">
-                            <label> State </label>
+                        <div class="form-group floating-group">
                             <select class="form-select" name="prop_city" v-model="response.prop_city">
                                 <option disabled value="">Select Property Location*</option>
                                 <option :value="data" v-for="(data, index) in states" :key="index"> {{ data }} </option>
                             </select>
+                            <label> State </label>
                         </div>
 
                         <!-- 4. Property Image Upload & Preview -->
@@ -52,7 +52,8 @@
                             <!-- Added ref="fileInput" to link up with your Composition API script -->
                             <input type="file" ref="fileInput" accept="image/*" class="form-control w-75">
                             <div class="w-25 p-2 bg-light rounded" v-if="response.image_path">
-                                <img :src="`http://localhost/rental_app/api/` + response.image_path" class="preview_img" alt="Property Preview" />
+                                <img :src="store.apiBasePath + response.image_path" class="preview_img"
+                                    alt="Property Preview" />
                             </div>
                         </div>
 
@@ -61,15 +62,20 @@
                         <div class="form-group file_upload ">
                             <div>
                                 <p class="my-0"> Quantity of Flats/Rooms</p>
-                                <button type="button" class="btn btn-sm btn-secondary px-3" @click="decrement()"> - </button>
-                                <input type="text" name="room_countr" v-model="roomCountr" class="w-25 py-0 px-2 text-center" />
+                                <button type="button" class="btn btn-sm btn-secondary px-3" @click="decrement()"> -
+                                </button>
+                                <input type="text" name="room_countr" v-model="roomCountr"
+                                    class="w-25 py-0 px-2 text-center" />
                                 <button type="button" class="btn btn-sm btn-dark px-3" @click="increment()"> + </button>
                             </div>
                             <div>
                                 <p class="my-0">Quantity of Shops</p>
-                                <button type="button" class="btn btn-sm btn-secondary px-3" @click="decrement2()"> - </button>
-                                <input type="text" name="shop_countr" v-model="shopCountr" class="w-25 py-0 px-2 text-center" />
-                                <button type="button" class="btn btn-sm btn-dark px-3" @click="increment2()"> + </button>
+                                <button type="button" class="btn btn-sm btn-secondary px-3" @click="decrement2()"> -
+                                </button>
+                                <input type="text" name="shop_countr" v-model="shopCountr"
+                                    class="w-25 py-0 px-2 text-center" />
+                                <button type="button" class="btn btn-sm btn-dark px-3" @click="increment2()"> +
+                                </button>
                             </div>
                         </div>
 
@@ -78,7 +84,8 @@
                             <button type="button" class="btn bg_purple text-white w-100" v-show="loaderSmall">
                                 <span class="loader-sm"></span>
                             </button>
-                            <button type="submit" name="submit" class="btn bg_purple text-light form-control" v-show="submitBtn"> 
+                            <button type="submit" name="submit" class="btn bg_purple text-light form-control"
+                                v-show="submitBtn">
                                 Submit
                             </button>
                         </div>
@@ -98,7 +105,10 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import Swal from 'sweetalert2'
+import Swal from 'sweetalert2';
+import { useDataStore } from '@/store/preData';
+const store = useDataStore();
+
 
 // 1. Nuxt 3 Composables for Routing
 const route = useRoute()
@@ -161,7 +171,7 @@ const getPropDetail = async () => {
 
     try {
         // $fetch implicitly throws an error if response status is not 2xx
-        const data = await $fetch('http://localhost/rental_app/api/get_single_property.php', {
+        const data = await $fetch(store.apiBasePath + 'get_single_property.php', {
             method: 'POST',
             body: {
                 prop_id: propId.value,
@@ -190,13 +200,13 @@ const btnUpload = async (e) => {
         file.value = fileInput.value.files[0]
     }
 
-    let basepath = "http://localhost/rental_app/api/"
+    // let basepath = "http://localhost/rental_app/api/"
     let formData = new FormData(form)
     formData.append('file', file.value)
 
     try {
         // Use $fetch for posting Multipart/FormData
-        const data = await $fetch('http://localhost/rental_app/api/edit_property.php', {
+        const data = await $fetch(store.apiBasePath + 'edit_property.php', {
             method: 'POST',
             body: formData
             // Note: Nuxt automatically assigns 'multipart/form-data' header when FormData is provided as body
@@ -212,7 +222,7 @@ const btnUpload = async (e) => {
                 router.push('/myProperties')
             })
 
-            var image_html = "<img src='" + basepath + data.image + "' class='img-thumbnail' width='300' />"
+            var image_html = "<img src='" + store.apiBasePath + data.image + "' class='img-thumbnail' width='300' />"
             uploadedImage.value = image_html
 
             if (fileInput.value) {

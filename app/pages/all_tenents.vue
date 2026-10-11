@@ -83,6 +83,10 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from '#app'
+import { useDataStore } from '@/store/preData';
+
+
+const store = useDataStore();
 
 // Router lifecycle instance
 const router = useRouter()
@@ -102,7 +106,7 @@ const cYear = ref('')
 const postData = async () => {
   try {
     // Replaced Axios with Nuxt 3 native $fetch
-    const data = await $fetch('http://localhost/rental_app/api/all_tenents.php', {
+    const data = await $fetch(store.apiBasePath + 'all_tenents.php', {
       method: 'POST',
       body: {
         userId: userId.value,

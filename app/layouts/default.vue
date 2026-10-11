@@ -1,3 +1,7 @@
+<script setup lang="ts">
+
+</script>
+
 <template>
     <!-- <Topbar /> -->
     <navigation />
@@ -5,6 +9,8 @@
         <h1> hero Image </h1>
     </div> -->
     <slot />
+    
+<footerPart> </footerPart>
 </template>
 <style lang="css" >
 .hero-img {

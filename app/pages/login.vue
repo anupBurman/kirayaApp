@@ -95,6 +95,9 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import Swal from 'sweetalert2';
 import Custom from '~/layouts/custom.vue';
+import { useDataStore } from '@/store/preData';
+
+const store = useDataStore();
 
 // Router instance
 const router = useRouter();
@@ -124,8 +127,8 @@ const logIn = async () => {
     loginBtn.value = false;
 
     try {
-        // Updated to use native Nuxt $fetch method
-        const data = await $fetch('http://localhost/rental_app/api/user_login.php', {
+        //   Nuxt $fetch method
+        const data = await $fetch(store.apiBasePath +'user_login.php', {
             method: 'POST',
             body: {
                 email: email.value,
@@ -139,7 +142,8 @@ const logIn = async () => {
             localStorage.setItem("userinfo", JSON.stringify(data.sql_massege[0]));
             localStorage.setItem("userId", JSON.stringify(data.sql_massege2));
             console.log(data)
-            window.location.reload();
+            // window.location.reload();
+            navigateTo('/')
             loader.value = false;
         } else {
             Swal.fire({
@@ -175,8 +179,8 @@ const forgotPassword = async () => {
     loader2.value = true;
 
     try {
-        // Updated to use native Nuxt $fetch method
-        const data2 = await $fetch('https://rentvent.store/api/forgot_password.ph', {
+        //  Nuxt $fetch method
+        const data2 = await $fetch( store.apiBasePath + 'forgot_password.ph', {
             method: 'POST',
             body: {
                 email: email.value,

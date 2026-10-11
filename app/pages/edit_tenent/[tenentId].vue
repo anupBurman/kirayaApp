@@ -3,6 +3,7 @@
 
         <h2> Edit {{ responseData.prop_name }} / {{ rowId }} </h2>
 
+
         <div class="row px-lg-5 px-2 pb-5">
             <div class="form-group ">
                 <span class="loader-absolute" v-if="loader"></span>
@@ -42,50 +43,68 @@
                                     placeholder="Enter Room/Flat Number" readonly>
                             </div>
 
+                            <div class="col-lg-6 form-group floating-group ">
+                                <!-- <span> Which You Want to Give Rent *  </span> -->
+                                <select class="form-select" v-model="tanency_type2" name="tanency_type"
+                                    @change="getTenancy">
+                                    <option hidden disabled selected></option>
+                                    <option value="Room"> Room </option>
+                                    <option value="Flat"> Flat </option>
+                                    <option value="Shop"> Shop </option>
+                                </select>
+                                <label> Which You Want to Give Rent* </label>
+                            </div>
+
                             <!-- 1 -->
-                            <div class="col-lg-6 form-group ">
-                                <span> Room/Flat Number </span>
-                                <input type="text" v-model="roomNumber" name="room_id" class="form-control"
-                                    placeholder="Enter Room/Flat Number">
+                            <div class="col-lg-6 form-group floating-group">
+                                <!-- <span> Room/Flat Number </span> -->
+                                <input type="text" class="form-control alpha-num" name="room_id" v-model="roomNumber"
+                                    :maxlength="maxLength" @input="handleInput" placeholder="1-99 or a-z" />
+                                <!-- <input type="text" v-model="roomNumber" name="room_id" class="form-control"
+                                    placeholder="Enter Room/Flat Number"> -->
+                                <label> Room/Flat Number </label>
                             </div>
 
                             <!-- 2 -->
-                            <div class="col-lg-6 form-group ">
-                                <span> Tenent Name </span>
+                            <div class="col-lg-6 form-group floating-group ">
+                                <!-- <span> Tenent Name </span> -->
                                 <input type="text" v-model="TenentName" class="form-control" name="tenent_name"
                                     placeholder="Tenent Name*" required>
+                                <label> Tenent Name </label>
                             </div>
 
                             <!-- 3 -->
-                            <div class="col-lg-6 form-group ">
-                                <span> Mobile Number </span>
+                            <div class="col-lg-6 form-group floating-group ">
                                 <input type="text" v-model="mobileNumber" class="form-control" maxlength="10"
                                     minlength="10" name="mob_number" placeholder="Tenent Mobile Number *" required>
+                                <label> Mobile Number </label>
                             </div>
 
                             <div class="col-lg-6 d-flex">
                                 <!-- 4 -->
-                                <div class="form-group w-50 px-0 mx-0">
-                                    <span> Gender </span>
+                                <div class="form-group floating-group  w-50 px-0 mx-0">
+                                    <!-- <span> Gender </span> -->
                                     <select class="form-select" name="gender" aria-label="Default select example">
                                         <option selected> {{ responseData.gender }} </option>
                                         <option value="male"> Male </option>
                                         <option value="female"> Female </option>
                                     </select>
+                                    <label>Gender </label>
                                 </div>
 
                                 <!-- 5 -->
-                                <div class="form-group w-50 px-0 mx-0">
-                                    <span> Total Members </span>
-                                    <input type="number" v-model="totalMemeber" class="form-control" maxlength="10"
+                                <div class="form-group floating-group  w-50 px-0 mx-0" v-if="totMembr">
+                                    <!-- <span> Total Members </span> -->
+                                    <input type="number" min="0" v-model="totalMemeber" class="form-control" max="10"
                                         name="total_members" placeholder="Total Members">
+                                    <label>Total Members</label>
                                 </div>
                             </div>
 
                             <div class="col-lg-6 d-flex">
                                 <!-- 6 -->
-                                <div class="form-group w-50 px-0 mx-0">
-                                    <span> Occupation </span>
+                                <div class="form-group floating-group  w-50 px-0 mx-0" v-if="totMembr">
+                                    <!-- <span> Occupation </span> -->
                                     <select class="form-select " name="occupation" aria-label="Default select example">
                                         <option selected> {{ responseData.occupation }} </option>
                                         <option value="Govt.Job"> Govt. Job </option>
@@ -93,16 +112,18 @@
                                         <option value="Bussiness"> Bussiness </option>
                                         <option value="Self Employed"> Self Employed </option>
                                     </select>
+                                    <label>Occupation</label>
                                 </div>
                                 <!-- 7 -->
-                                <div class=" form-group  w-50 px-0 mx-0">
-                                    <span> ID Proof Type </span>
+                                <div class=" form-group floating-group  w-50 px-0 mx-0">
+                                    <!-- <span> ID Proof Type </span> -->
                                     <select class="form-select" name="idproof_type" aria-label="Default select example">
                                         <option selected> {{ responseData.idproof_type }} </option>
                                         <option value="Adhaar"> Adhaar </option>
                                         <option value="Voter ID"> Voter ID </option>
                                         <option value="Driving License"> Driving License </option>
                                     </select>
+                                    <label>ID Proof Type</label>
                                 </div>
                             </div>
                             <!-- 8 -->
@@ -111,8 +132,7 @@
                                 <input type="file" ref="fileInputRef" accept="image/*" class="form-control w-75 ">
                                 <input type="text" :value="imagePath" name="tenentImg" class="form-control w-75 d-none">
                                 <div class="w-25 p-2 bg-light rounded">
-                                    <img :src="`http://localhost/rental_app/api/` + responseData.image_path"
-                                        class="preview_img" />
+                                    <img :src="store.apiBasePath + responseData.image_path" class="preview_img" />
                                 </div>
                             </div>
 
@@ -131,48 +151,49 @@
                     <div class="form_2 " id="form_2" v-show="isForm2Visible">
                         <div class="row">
                             <!-- <h4> Rental Deatals </h4> -->
-                            <div class="col-lg-6 form-group ">
-                                <span> Monthly Rent Amount </span>
+                            <div class="col-lg-6 form-group floating-group ">
+                                <!-- <span> Monthly Rent Amount </span> -->
                                 <input type="text" name="rent_amount" class="form-control" v-model="rentAmount"
-                                    placeholder="Enter Montly Rent Amount">
+                                    placeholder="">
+                                <label>Monthly Rent Amount</label>
                             </div>
-                            <div class="col-lg-6 form-group ">
-                                <span> Rent Mode </span>
+                            <div class="col-lg-6 form-group floating-group ">
+                                <!-- <span> Rent Mode </span> -->
                                 <select class="form-select" name="rent_mode" aria-label="Default select example">
                                     <option selected> {{ responseData.rent_mode }} </option>
                                     <option value="fixed date"> 5th day of the Month </option>
                                     <option value="date to date"> Date to Date </option>
                                 </select>
+                                <label>Rent Mode</label>
                             </div>
 
                             <!-- <div class="form-group ">
                             <input type="text" :value="response.rent_start_date"  name="rent_start_date" class="form-control"
                                 placeholder="Start Date Of Rent" required >
                         </div> -->
-                            <div class="col-lg-6 form-group ">
-                                <span> Rent Start Date </span>
+                            <div class="col-lg-6 form-group floating-group ">
+                                <!-- <span> Rent Start Date </span> -->
                                 <input type="date" v-model="responseData.rent_start_date" name="rent_start_date"
-                                    class="form-control" placeholder="Start Date Of Rent">
+                                    class="form-control" placeholder="">
+                                <label>Rent Start Date</label>
                             </div>
-                            <!-- <div class="form-group ">
-                            <button type="button" class="btn btn-sm bg_purple text-white  round">Advance Rent</button>
-                            <button type="button" class="btn btn-sm bg_purple text-white mx-2 round">None</button>
-                        </div> -->
 
-                            <div class="col-lg-6 form-group ">
-                                <span> Enter if Any Due/Advance Payment </span>
-                                <input type="text" name="strt_due_amount" class="form-control"
-                                    placeholder="Enter Due Amount">
+
+                            <div class="col-lg-6 form-group floating-group">
+                                <!-- <span> Enter if Any Due/Advance Payment </span> -->
+                                <input type="text" name="strt_due_amount" class="form-control" placeholder="">
+                                <label> Enter if Any Due/Advance Payment</label>
                             </div>
                             <p class="mb-0"> Do You Take Any Security Deposit ? </p>
-                            <div class=" form-group d-flex align-items-end">
+                            <div class=" form-group  d-flex align-items-end">
                                 <button type="button" class="btn btn-sm bg_purple text-white  round"
                                     @click="securityAmt = false">No</button>
                                 <button type="button" class="btn btn-sm bg_purple text-white mx-2 round"
                                     @click="securityAmt = !false">Yes</button>
 
-                                <input type="number" v-model="securityAmt" name="security_amount" class="form-control "
-                                    placeholder="Enter Sucurity Amount" v-if="securityAmt">
+                                <input type="number" v-model="securityAmt" name="security_amount"
+                                    class="form-control no-spinners " placeholder="Enter Sucurity Amount"
+                                    v-if="securityAmt">
                             </div>
                             <p class="mb-0"> Do You Take Montly maintenence Charges? </p>
                             <div class="form-group d-flex align-items-end">
@@ -180,8 +201,9 @@
                                     @click="mentainChrg = ''">No</button>
                                 <button type="button" class="btn btn-sm bg_purple text-white mx-2 round"
                                     @click="mentainChrg = !''">Yes</button>
-                                <input type="number" v-model="mentainChrg" name="mantenece_charge" class="form-control"
-                                    placeholder="Enter Monthly mantenece Charge" v-if="mentainChrg">
+                                <input type="number" v-model="mentainChrg" name="mantenece_charge"
+                                    class="form-control no-spinners " placeholder="Enter Monthly mantenece Charge"
+                                    v-if="mentainChrg">
                             </div>
 
                             <hr>
@@ -202,19 +224,21 @@
                                 <!-- electricity -->
                                 <div v-if="perUnitBox">
                                     <div class="d_flex_between">
-                                        <div class="form-group w-50 ">
-                                            <input type="text" v-model="perUnit" name="e_per_unit" class="form-control"
-                                                placeholder="Per Unit Price">
+                                        <div class="form-group floating-group w-50 ">
+                                            <input type="number" v-model="perUnit" min="0" name="e_per_unit"
+                                                class="form-control" placeholder="">
+                                            <label>Per Unit Price</label>
                                         </div>
-                                        <div class="form-group w-50">
+                                        <div class="form-group floating-group w-50">
                                             <input type="date" v-model="responseData.e_redaing_date"
-                                                name="e_redaing_date" class="form-control"
-                                                placeholder="Enter Reading Date">
+                                                name="e_redaing_date" class="form-control" placeholder="">
+                                            <label>Enter Reading Date</label>
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group floating-group">
                                         <input type="number" name="bijli_reading" v-model="responseData.bijli_reading"
-                                            class="form-control" placeholder="Enter Reading in Units">
+                                            class="form-control no-spinners" placeholder="">
+                                        <label>Enter Reading in Units</label>
                                     </div>
                                 </div>
 
@@ -231,9 +255,10 @@
                                 </div>
 
                                 <div v-if="fixedMonthly">
-                                    <div class="form-group">
+                                    <div class="form-group floating-group">
                                         <input type="number" v-model="eFixedMonthlyAmount" name="e_fixed_monthly"
-                                            class="form-control" placeholder="Enter Amount">
+                                            class="form-control no-spinners" placeholder="">
+                                        <label>Enter Amount</label>
                                     </div>
                                 </div>
                                 <hr>
@@ -243,7 +268,7 @@
                             <!-- water  -->
                             <div class="col-lg-6">
                                 <h4> Water Bill</h4>
-                                <div class="form-group  px-0 mx-0">
+                                <div class="form-group   px-0 mx-0">
                                     <select class="form-select" @change="waterBill($event)" name="water_bill"
                                         aria-label="Default select example">
                                         <!-- <option selected class="d-none" >Select Rent Mode </option> -->
@@ -255,26 +280,30 @@
                                 </div>
                                 <div v-if="perUnitBox2">
                                     <div class="d_flex_between ">
-                                        <div class="form-group w-50">
+                                        <div class="form-group floating-group w-50">
                                             <input type="number" v-model="perUnit2" name="w_per_unit"
-                                                class="form-control" placeholder="Per Unit Price">
+                                                class="form-control" min="0" placeholder="">
+                                            <label>Per Unit Price</label>
                                         </div>
-                                        <div class="form-group w-50">
+                                        <div class="form-group floating-group w-50">
                                             <input type="date" name="w_redaing_date" class="form-control"
-                                                placeholder="Enter Date ">
+                                                placeholder="">
+                                            <label>Enter Date</label>
                                         </div>
                                     </div>
-                                    <div class="form-group ">
-                                        <input type="number" name="water_reading" class="form-control"
-                                            placeholder="Enter Water Reading">
+                                    <div class="form-group floating-group ">
+                                        <input type="number" name="water_reading" class="form-control no-spinners"
+                                            placeholder="">
+                                        <label>Enter Water Reading</label>
                                     </div>
                                 </div>
                                 <div class="d-flex" v-if="govBill2">
                                 </div>
                                 <div v-if="fixedMonthly2">
-                                    <div class="form-group">
+                                    <div class="form-group floating-group">
                                         <input type="number" v-model="eFixedMonthlyAmount" name="w_fixed_monthly"
-                                            class="form-control" placeholder="Enter Amount">
+                                            class="form-control no-spinners" placeholder="">
+                                        <label>Enter Amount</label>
                                     </div>
                                 </div>
                             </div>
@@ -300,6 +329,8 @@
                 </form>
             </div>
             <div class="col-lg-2">
+
+
                 <!-- <h6 class="alert alert-success" v-if="successMsg"> Updated Successfully !! </h6>
                 <span class="loader" v-if="loader"></span> -->
             </div>
@@ -312,10 +343,19 @@
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import Swal from 'sweetalert2'
+import { useDataStore } from '@/store/preData';
+import alphaNumeric from '~/components/alphaNumeric.vue';
+
+
+const store = useDataStore();
 
 // Router access in Nuxt 3
 const route = useRoute()
 const rowId = ref(route.params.tenentId)
+
+const tanency_type2 = ref('');
+const totMembr = ref(true);
+
 
 // Form & UI States
 const responseData = ref([])
@@ -381,10 +421,15 @@ const goBack = () => {
     goback.value = false
 }
 
+const getTenancy = () => {
+    tanency_type2.value === 'Shop' ? totMembr.value = false : totMembr.value = true;
+    // console.log(totMembr.value)
+}
+
 // Fetch Data with $fetch
 const fetchData = async () => {
     try {
-        const data = await $fetch('http://localhost/rental_app/api/tenent_all_details.php?id=' + `${rowId.value}`, {
+        const data = await $fetch(store.apiBasePath + 'tenent_all_details.php?id=' + `${rowId.value}`, {
             method: 'POST',
             body: {
                 id: rowId.value,
@@ -409,6 +454,9 @@ const fetchData = async () => {
             perUnit.value = res.e_per_unit
             eFixedMonthlyAmount.value = res.e_fixed_monthly
             wFixedMonthlyAmount.value = res.w_fixed_monthly
+            tanency_type2.value = res.tanency_type
+
+            tanency_type2.value === 'Shop' ? totMembr.value = false : totMembr.value = true;
         }
     } catch (error) {
         console.error('Something went wrong matching response context:', error)
@@ -435,14 +483,12 @@ const postData = async () => {
 
     try {
         // $fetch natively structures boundary configs if a FormData object is passed into the body
-        const response = await $fetch('http://localhost/rental_app/api/edit_tenent.php', {
+        const response = await $fetch(store.apiBasePath + 'edit_tenent.php', {
             method: 'POST',
             body: formData
         })
-
         loaderSmall.value = false
         submitBtn.value = true
-
         if (response?.image === '') {
             Swal.fire({
                 text: response.message,
@@ -462,14 +508,48 @@ const postData = async () => {
     } catch (error) {
         loaderSmall.value = false
         submitBtn.value = true
-        console.error('Form processing failed:', error)
+        // console.error('Form processing failed:', error)
+        console.error("Something went wrong:", error);
+        Swal.fire({
+            icon: "error",
+            text: 'Something went wrong.'
+        });
     }
+}
+
+// const inputValue = ref('')
+
+// 1. Dynamically determine the max length based on the first character
+const maxLength = computed(() => {
+    const firstChar = roomNumber.value.charAt(0)
+    if (!firstChar) return 2 // Default max length when empty
+
+    // If the first character is a digit, allow 2 characters. Otherwise, restrict to 1.
+    return /^\d$/.test(firstChar) ? 2 : 1
+})
+// 2. Handle and sanitize the input in real-time
+const handleInput = (event) => {
+    let value = event.target.value
+    console.log(firstChar)
+
+    // Strip out any characters that are not alphanumeric
+    value = value.replace(/[^a-zA-Z0-9]/g, '')
+
+    // Evaluate max length based on the sanitized first character
+    const firstChar = value.charAt(0)
+    const currentMax = /^\d$/.test(firstChar) ? 2 : 1
+
+    // Enforce the dynamic slice/trim
+    roomNumber.value = value.slice(0, currentMax)
+
+    // Keep the DOM input value in sync with the reactive state
+    event.target.value = roomNumber.value
 }
 
 // Lifecycle Hooks
 onMounted(() => {
     // console.log(rowId.value)
-    fetchData()
+    fetchData();
 })
 </script>
 <style scoped>
@@ -488,5 +568,9 @@ onMounted(() => {
 
 .file_upload input {
     padding: 1.6rem;
+}
+
+.alpha-num {
+    text-transform: uppercase;
 }
 </style>

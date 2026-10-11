@@ -1,5 +1,5 @@
 <template>
-    <Topbar />
+    <!-- <Topbar /> -->
     <div class="py-3 bg_purple text-center">
         <img src="/images/rental_home_logo2.png" />
         <h2 class="page_header">

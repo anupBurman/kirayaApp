@@ -1,224 +1,219 @@
 <template>
-    <div class="container-fuidte template"
-        style="background-image: url('/images/yyy.jpg');  background-size: cover; background-blend-mode: overlay; ">
-        <!-- <h2> My Properties Detail {{ rowId }} </h2> -->
-        <!-- {{ output }} <br> {{ response2.month }} -->
+  <div class="container-fuidte template"
+    style="background-image: url('/images/yyy.jpg');  background-size: cover; background-blend-mode: overlay; ">
+    <!-- <h2> My Properties Detail {{ rowId }} </h2> -->
+    <!-- {{ output }} <br> {{ response2.month }} -->
 
-        <!-- {{ response2 }} -->
-        <div class="row py-4 d-flex justify-content-center">
-           
-
-
-            <div class="col-lg-4  ">
-                <div v-if="successAlert" class="alert alert-success  alert-dismissible">
-                    {{ successMessage }}
-                    <button class="btn-close  " aria-label="close" @click="successAlert = false"></button>
-                </div>
-                <div v-if="errorAlert" class="alert alert-danger alert-dismissible">
-                    {{ errorMessage }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" @click="errorAlert = false"
-                        aria-label="Close">
-                    </button>
-                </div>
-
-                <!-- ======== RENT RECIEVED BLOCK START  ========= -->
-                <div class="form p-4 mb-3 text-start">
-                    <form id="form" @submit.prevent="postBill">
-                        <div id="form_1">
-                            <h4 class="mb-0 text-center py-3"> Rent Recieve </h4>
-                            <div class="d_flex_between ">
-                                <h5 class="mb-0">{{ output.tenent_name }} /ID:{{ output.id }}</h5>
-
-                                <!--   WHEN USER GANERATE RECIEPT FIRST TIME THEN (this will show) -->
-                                <button type="button"
-                                    class="btn btn-sm text-light btn-default bg_purple round  mx-lg-4 px-3"
-                                    v-if="response2.length == 0">
-                                    {{ dayy }}-{{ monthh }}-{{ Yearr }} <span style="color:aqua">To</span> {{ dayy }}-{{
-                                        parseInt(monthh) + 1 }}-{{
-                                        Yearr }}
-                                </button>
-
-                                <!--   WHEN USER ALREADY GANERATED RECIEPT ATLEAST ONCE THEN (this will show) -->
-                                <button type="button"
-                                    class="btn btn-sm text-light btn-default bg_purple round  mx-lg-4 px-3" v-else>
-                                    {{ dayy }}-{{ parseInt(response2.month) + 1 }}-{{ Yearr }} <span
-                                        style="color:aqua">To</span> {{ dayy }}-{{
-                                            parseInt(response2.month) + 2 }}-{{
-                                        Yearr }}
-                                </button>
-                            </div>
-                            <hr>
-
-                            <div class="form-group d-none">
-                                <input class="form-control" type="text" name="row_id" v-model="rowId">
-                                <input class="form-control" type="text" v-model="tenentId">
-                            </div>
+    <!-- {{ response2 }} -->
+    <div class="row py-4 d-flex justify-content-center">
 
 
-                            <div class="form-group ">
-                                <label>
-                                    Enter Amount You recieved
-                                </label>
-                                <input class="form-control" placeholder="Enter Amount *" type="text" v-model="amount"
-                                    required>
-                            </div>
+
+      <div class="col-lg-4  ">
+        <div v-if="successAlert" class="alert alert-success  alert-dismissible">
+          {{ successMessage }}
+          <button class="btn-close  " aria-label="close" @click="successAlert = false"></button>
+        </div>
+        <div v-if="errorAlert" class="alert alert-danger alert-dismissible">
+          {{ errorMessage }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" @click="errorAlert = false"
+            aria-label="Close">
+          </button>
+        </div>
+
+        <!-- ======== RENT RECIEVED BLOCK START  ========= -->
+        <div class="form p-4 mb-3 text-start">
+          <form id="form" @submit.prevent="postBill">
+            <div id="form_1">
+              <h4 class="mb-0 text-center py-3"> Rent Recieve </h4>
+              <div class="d_flex_between ">
+                <h5 class="mb-0">{{ output.tenent_name }} /ID:{{ output.id }}</h5>
+
+                <!--   WHEN USER GANERATE RECIEPT FIRST TIME THEN (this will show) -->
+                <button type="button" class="btn btn-sm text-light btn-default bg_purple round  mx-lg-4 px-3"
+                  v-if="response2.length == 0">
+                  {{ dayy }}-{{ monthh }}-{{ Yearr }} <span style="color:aqua">To</span> {{ dayy }}-{{
+                    parseInt(monthh) + 1 }}-{{
+                    Yearr }}
+                </button>
+
+                <!--   WHEN USER ALREADY GANERATED RECIEPT ATLEAST ONCE THEN (this will show) -->
+                <button type="button" class="btn btn-sm text-light btn-default bg_purple round  mx-lg-4 px-3" v-else>
+                  {{ dayy }}-{{ parseInt(response2.month) + 1 }}-{{ Yearr }} <span style="color:aqua">To</span> {{ dayy
+                  }}-{{
+                    parseInt(response2.month) + 2 }}-{{
+                    Yearr }}
+                </button>
+              </div>
+              <hr>
+
+              <div class="form-group d-none">
+                <input class="form-control" type="text" name="row_id" v-model="rowId">
+                <input class="form-control" type="text" v-model="tenentId">
+              </div>
 
 
-                            <div class="form-group" v-if="response2.length == 0">
-                                <label>
-                                    Which Month's Rent You recieving
-                                </label>
-                                <select class="form-select" v-model="rentCollectMonth" @change="checkMonth($event)"
-                                    name="bijli_bill" aria-label="Default select example" required>
-                                    <option value="" selected>Select Month *</option>
-                                    <option value="1"> January </option>
-                                    <option value="2"> Fabrury </option>
-                                    <option value="3"> March </option>
-                                    <option value="4"> April </option>
-                                    <option value="5"> May </option>
-                                    <option value="6"> June </option>
-                                    <option value="7"> July </option>
-                                    <option value="8"> August </option>
-                                    <option value="9"> Sepember </option>
-                                    <option value="10"> November </option>
-                                    <option value="11"> October </option>
-                                    <option value="12"> December </option>
-                                </select>
-                            </div>
-                            <div class="form-group" v-else>
-                                <!-- Which Month's Rent You recieving -->
-                                <input class="form-control" readonly type="hidden"
-                                    v-model="rentCollectMonth" required>
-                            </div>
+              <div class="form-group floating-group">
+                <input class="form-control" placeholder="" type="text" v-model="amount" required>
+                <label>
+                  Enter Amount You recieved *
+                </label>
+              </div>
 
-                            <!-- <div class="form-group ">
+
+              <div class="form-group floating-group" v-if="response2.length == 0">
+                
+                <select class="form-select" v-model="rentCollectMonth" @change="checkMonth($event)" name="bijli_bill"
+                  aria-label="Default select example" required>
+                  <option value="" selected></option>
+                  <option value="1"> January </option>
+                  <option value="2"> Fabrury </option>
+                  <option value="3"> March </option>
+                  <option value="4"> April </option>
+                  <option value="5"> May </option>
+                  <option value="6"> June </option>
+                  <option value="7"> July </option>
+                  <option value="8"> August </option>
+                  <option value="9"> Sepember </option>
+                  <option value="10"> November </option>
+                  <option value="11"> October </option>
+                  <option value="12"> December </option>
+                </select>
+                <label>
+                  Which Month's Rent You recieving
+                </label>
+              </div>
+              <div class="form-group" v-else>
+                <!-- Which Month's Rent You recieving -->
+                <input class="form-control" readonly type="hidden" v-model="rentCollectMonth" required>
+              </div>
+
+              <!-- <div class="form-group ">
                                 <label>
                                     Enter Date
                                 </label>
                                 <input class="form-control" type="date" v-model="date" required>
                             </div> -->
 
-                            <div class="form-group ">
-                                <label>
-                                    Write Naration
-                                </label>
-                                <textarea class="form-control" placeholder="Write Naration"
-                                    v-model="naration"></textarea>
-                            </div>
-                            <div class="form-group " v-if="nextBtn">
-                                <button type="button" class="btn bg_purple text-light  round  " @click="nextShow()">
-                                    Next &nbsp; <i class="fa fa-arrow-right text-light " aria-hidden="true"></i>
-                                </button>
-                            </div>
-                        </div>
+              <div class="form-group">
+                
+                <textarea class="form-control" placeholder="Write Naration (Optional) " v-model="naration"></textarea>
+              </div>
+              <div class="form-group " v-if="nextBtn">
+                <button type="button" class="btn bg_purple text-light  round  " @click="nextShow()">
+                  Next &nbsp; <i class="fa fa-arrow-right text-light " aria-hidden="true"></i>
+                </button>
+              </div>
+            </div>
 
 
 
-                        <!-- ====== ELECTRICITY AND WATER BILL START (this will show when bill charge as per unit) ======= -->
-                        <div id="form_2">
-                            <div v-if="output.e_per_unit > 0">
+            <!-- ====== ELECTRICITY AND WATER BILL START (this will show when bill charge as per unit) ======= -->
+            <div id="form_2">
+              <div v-if="output.e_per_unit > 0">
 
-                                <button class="btn bg_purple btn-sm px-3 round" v-if="goback" @click="goBack()">
-                                    <i class="fa fa-arrow-left text-light " aria-hidden="true"></i>
-                                </button>
+                <button class="btn bg_purple btn-sm px-3 round" v-if="goback" @click="goBack()">
+                  <i class="fa fa-arrow-left text-light " aria-hidden="true"></i>
+                </button>
 
-                                <h4 class="mb-0 text-center py-3"> Electricity Bill </h4>
-                                <div>
+                <h4 class="mb-0 text-center py-3"> Electricity Bill </h4>
+                <div>
 
-                                    <!-- this will show when zero entry in electric_water_bill table -->
-                                    <div class="form-group" v-if="readingField">
-                                        <label> Electricity Last Reading </label>
-                                        <h6 class="mb-0 text-danger"> </h6>
-                                        <input class="form-control" placeholder="Enter Last Reading" readonly
-                                            type="number" v-model="lastReading">
-                                    </div>
+                  <!-- this will show when zero entry in electric_water_bill table -->
+                  <div class="form-group" v-if="readingField">
+                    <label> Electricity Last Reading </label>
+                    <h6 class="mb-0 text-danger"> </h6>
+                    <input class="form-control" placeholder="Enter Last Reading" readonly type="number"
+                      v-model="lastReading">
+                  </div>
 
-                                    <!-- this will show when atleast 1 entry has been done in electric_water_bill table -->
-                                    <div class="form-group ">
-                                        <label> Electricity Last Reading2 </label>
-                                        <h6 class="mb-0 text-danger"> </h6>
-                                        <input class="form-control" placeholder="Enter Last Reading " type="number"
-                                            v-model="lastReading2">
-                                    </div>
-                                    <div class="form-group">
-                                        <label> Electricity Current Reading </label>
-                                        <h6 class="mb-0 text-danger"> {{ error_msg }}</h6>
-                                        <input class="form-control" placeholder="Current Reading *" type="number"
-                                            v-model="currentReading" @keyup="getReading" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Reading Date </label>
-                                        <input class="form-control" type="date" v-model="date" Required>
-                                    </div>
-                                </div>
-
-
-                                <div class="px-0 mx-0 d-none">
-                                    <h5 class="mb-0"> Water Charge </h5>
-                                    <div class="form-group ">
-                                        <input class="form-control" type="text" name="row_id" v-model="rowId">
-                                        <input class="form-control" type="text" v-model="tenentId">
-                                    </div>
-                                    <div class="form-group">
-                                        <label> Water Current Reading </label>
-                                        <input class="form-control" placeholder="Current Reading" type="text"
-                                            v-model="currentReading">
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Reading Date </label>
-                                        <input class="form-control" type="date" v-model="date">
-                                    </div>
-                                </div>
-
-                                <div class="form-group d_flex_between ">
-                                    <h6 class="mb-0 "> units: <span class="text_bold"> {{ reslt_reading }}</span> </h6>
-                                    <h6 class="mb-0 "> Charges per unit: <span class="text_bold"> {{ output.e_per_unit
-                                            }}</span>
-                                    </h6>
-                                    <h6 class="mb-0"> Last Reading:
-                                        <span class="text_bold" v-if="readingField">{{ output.bijli_reading }}</span>
-                                        <span> {{ lastReading2 }} </span>
-                                    </h6>
-                                </div>
-                                <hr />
-                                <div class="form-group d_flex_between ">
-                                    <h6 class="mb-0 "> Monthly: <span class="text_bold"> </span> </h6>
-                                    <span class="text_bold"> {{ output.rent_amount }} </span>
-                                </div>
-                                <div class="form-group d_flex_between ">
-                                    <h6 class="mb-0 "> Electricity Bill: </h6>
-                                    <span class="text_bold"> {{ eBillAmount }} </span>
-                                </div>
-                                <hr>
-                                <div class="form-group d_flex_between ">
-                                    <h6 class="mb-0 ">Total: </h6>
-                                    <span class="text_bold"> {{ subTotal }} </span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="btn default text-light bg_purple w-100"> Ganerate </button>
-                            </div>
-                        </div>
-
-                        <div class="form-group" v-if="submitt">
-                            <button type="submit" class="btn default text-light bg_purple w-100"> Ganerate </button>
-                        </div>
-
-
-
-                    </form>
+                  <!-- this will show when atleast 1 entry has been done in electric_water_bill table -->
+                  <div class="form-group ">
+                    <label> Electricity Last Reading2 </label>
+                    <h6 class="mb-0 text-danger"> </h6>
+                    <input class="form-control" placeholder="Enter Last Reading " type="number" v-model="lastReading2">
+                  </div>
+                  <div class="form-group">
+                    <label> Electricity Current Reading </label>
+                    <h6 class="mb-0 text-danger"> {{ error_msg }}</h6>
+                    <input class="form-control" placeholder="Current Reading *" type="number" v-model="currentReading"
+                      @keyup="getReading" required>
+                  </div>
+                  <div class="form-group">
+                    <label>Reading Date </label>
+                    <input class="form-control" type="date" v-model="date" Required>
+                  </div>
                 </div>
 
+
+                <div class="px-0 mx-0 d-none">
+                  <h5 class="mb-0"> Water Charge </h5>
+                  <div class="form-group ">
+                    <input class="form-control" type="text" name="row_id" v-model="rowId">
+                    <input class="form-control" type="text" v-model="tenentId">
+                  </div>
+                  <div class="form-group">
+                    <label> Water Current Reading </label>
+                    <input class="form-control" placeholder="Current Reading" type="text" v-model="currentReading">
+                  </div>
+                  <div class="form-group">
+                    <label>Reading Date </label>
+                    <input class="form-control" type="date" v-model="date">
+                  </div>
+                </div>
+
+                <div class="form-group d_flex_between ">
+                  <h6 class="mb-0 "> units: <span class="text_bold"> {{ reslt_reading }}</span> </h6>
+                  <h6 class="mb-0 "> Charges per unit: <span class="text_bold"> {{ output.e_per_unit
+                  }}</span>
+                  </h6>
+                  <h6 class="mb-0"> Last Reading:
+                    <span class="text_bold" v-if="readingField">{{ output.bijli_reading }}</span>
+                    <span> {{ lastReading2 }} </span>
+                  </h6>
+                </div>
+                <hr />
+                <div class="form-group d_flex_between ">
+                  <h6 class="mb-0 "> Monthly: <span class="text_bold"> </span> </h6>
+                  <span class="text_bold"> {{ output.rent_amount }} </span>
+                </div>
+                <div class="form-group d_flex_between ">
+                  <h6 class="mb-0 "> Electricity Bill: </h6>
+                  <span class="text_bold"> {{ eBillAmount }} </span>
+                </div>
+                <hr>
+                <div class="form-group d_flex_between ">
+                  <h6 class="mb-0 ">Total: </h6>
+                  <span class="text_bold"> {{ subTotal }} </span>
+                </div>
+              </div>
+              <div class="form-group">
+                <button type="submit" class="btn default text-light bg_purple w-100"> Ganerate </button>
+              </div>
             </div>
+
+            <div class="form-group" v-if="submitt">
+              <button type="submit" class="btn default text-light bg_purple w-100"> Ganerate </button>
+            </div>
+
+
+
+          </form>
         </div>
 
-
+      </div>
     </div>
+
+
+  </div>
 </template>
 
 <script setup>
 import { ref, onMounted, onBeforeUpdate } from 'vue'
 import Swal from 'sweetalert2'
+import { useDataStore } from '@/store/preData';
+
+const store = useDataStore();
 
 // Access Nuxt 3 routing structures
 const route = useRoute()
@@ -266,7 +261,7 @@ const requireMsg = ref(false)
 // Fetch tenant overall profile context information
 const RecievdAmount = async () => {
   try {
-    const data = await $fetch('http://localhost/rental_app/api/tenent_all_details.php', {
+    const data = await $fetch(store.apiBasePath + 'tenent_all_details.php', {
       method: 'POST',
       body: { tenentId: tenentId.value }
     })
@@ -301,7 +296,7 @@ const checkMonth = (e) => {
 // Process structural billing record upload to endpoint routing system
 const postBill = async (e) => {
   e.preventDefault()
-  
+
   if (!output.value.rent_start_date) return
 
   let Obj = new Date(output.value.rent_start_date)
@@ -311,7 +306,7 @@ const postBill = async (e) => {
   console.log(startDate, startYear, startMonth)
 
   try {
-    const data = await $fetch('http://localhost/rental_app/api/recieve_payment.php', {
+    const data = await $fetch(store.apiBasePath + 'recieve_payment.php', {
       method: 'POST',
       body: {
         property: rowId.value,
@@ -339,10 +334,8 @@ const postBill = async (e) => {
         timer: 2000,
       }).then(() => {
         // Nuxt route migration configuration parameter layout
-        router.push({ 
-          name: 'TenentProfile', 
-          params: { id: rowId.value, tenentId: tenentId.value } 
-        })
+        router.push('/tenent_profile/' + rowId.value + '/' + tenentId.value,
+        )
       })
     } else {
       Swal.fire({
@@ -363,7 +356,7 @@ const getRentReceived = async () => {
   let reverseData
 
   try {
-    const data = await $fetch('http://localhost/rental_app/api/tenent_bill_detail.php', {
+    const data = await $fetch(store.apiBasePath + 'tenent_bill_detail.php', {
       method: 'POST',
       body: { id: tenentId.value }
     })
@@ -431,9 +424,9 @@ onMounted(() => {
   rowId.value = route.params.slug[0]
   tenentId.value = route.params.slug[1]
   rentStartDate.value = route.params.slug[2]
-  
-  
-  
+
+
+
   RecievdAmount()
   getRentReceived()
 
@@ -456,5 +449,3 @@ onBeforeUpdate(() => {
   }
 })
 </script>
-
-
