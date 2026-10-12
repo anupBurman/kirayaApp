@@ -1,5 +1,6 @@
 <template>
-  <div class="container-fluid px-0 template" style="background-image: url('/images/abstract_01.webp');background-size: cover;">
+  <div class="container-fluid px-0 template"
+    style="background-image: url('/images/abstract_01.webp');background-size: cover;">
     <!-- <div class="py-3 bg_purple">
       <img src="/images/rental_home_logo2.png" />
       <h2 class="page_header">
@@ -20,30 +21,35 @@
             </div>
             <div class="form-group">
               <label>
-                <i class="fa fa-envelope" aria-hidden="true"></i>Enter Valid E-mail <span class="text_warning"> * </span>
+                <i class="fa fa-envelope" aria-hidden="true"></i>Enter Valid E-mail <span class="text_warning"> *
+                </span>
               </label>
               <input type="email" placeholder="Email" v-model="email" class="form-control" required>
             </div>
             <div class="form-group">
               <label class="d_flex_between">
                 <span>
-                  <i class="fa fa-unlock-alt" aria-hidden="true"></i>Password <span class="text_warning"> * </span>
+                  <i class="fa fa-unlock-alt"  aria-hidden="true"></i>Password <span class="text_warning">
+                    * </span>
                 </span>
-                <i class="fa fa-info-circle px-2 info_btn" aria-hidden="true"> </i>
-                <span class="info_card alert alert-warning ">
+                <i class="fa fa-info-circle px-2 " @click="info" aria-hidden="true"> </i>
+                <!-- <span class="info_card alert alert-warning ">
                   <ul class="ps-3">
                     <li> Minimum length must be 6 characters and maximum 12 characters </li>
                     <li> should be atleast 1 numeric character. </li>
                   </ul>
-                </span>
+                </span> -->
               </label>
-              <input type="password" v-model="password" minlength="6" maxlength="10" class="form-control" required placeholder="Password">
+              <input type="password" v-model="password" minlength="6" maxlength="10" class="form-control" required
+                placeholder="Password">
             </div>
             <div class="form-group">
               <label>
-                <i class="fa fa-unlock-alt" aria-hidden="true"></i> Confirm Password <span class="text_warning"> * </span>
+                <i class="fa fa-unlock-alt" aria-hidden="true"></i> Confirm Password <span class="text_warning"> *
+                </span>
               </label>
-              <input type="password" v-model="conformPass" minlength="6" maxlength="10" class="form-control" placeholder="Password">
+              <input type="password" v-model="conformPass" minlength="6" maxlength="10" class="form-control"
+                placeholder="Password">
             </div>
             <div>
               <button type="button" class="btn bg_purple text-white w-100" v-show="loader">
@@ -58,7 +64,7 @@
             </div>
           </form>
         </div>
-        
+
       </div>
     </div>
   </div>
@@ -73,7 +79,7 @@ import { useDataStore } from '@/store/preData';
 const store = useDataStore();
 
 definePageMeta({
-    layout:'custom'
+  layout: 'custom'
 })
 
 // State variables
@@ -97,6 +103,12 @@ onMounted(() => {
     // router.push('/');
   }
 });
+
+const info = () => {
+  Swal.fire({
+    text: 'Minimum length must be 6 characters and maximum 12 characters, should be atleast 1 numeric character'
+  });
+}
 
 // Methods
 const postData = async () => {

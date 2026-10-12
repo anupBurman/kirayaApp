@@ -20,16 +20,20 @@
                     </div>
                     <!-- <button class="btn btn-dark btn-sm" v-if="goback" @click="goBack()"> back </button> -->
                     <form id="form2" @submit.prevent="postData($event)">
-                        <div class="form_1 " v-show="!goback" id="form_1">
-                            <div class="form-group d-none" v-for="(data, i) in response" :key="i">
-                                <input type="text" name="prop_name" :value="buildingName" class="form-control"
-                                    placeholder="Enter Room/Flat Number">
-                                <input type="" name="prop_id" :value="rowId" class="form-control"
-                                    placeholder="Enter Room/Flat Number">
-                            </div>
-                            <div class="d_flex">
 
-                                <div class="form-group floating-group w-50 pe-lg-2 mx-0">
+                        <div class="form_1" v-show="!goback" id="form_1">
+                            <div class="row">
+
+
+                                <div class="form-group d-none" v-for="(data, i) in response" :key="i">
+                                    <input type="text" name="prop_name" :value="buildingName" class="form-control"
+                                        placeholder="Enter Room/Flat Number">
+                                    <input type="" name="prop_id" :value="rowId" class="form-control"
+                                        placeholder="Enter Room/Flat Number">
+                                </div>
+
+
+                                <div class="form-group floating-group  col-lg-6 ">
                                     <!-- <span> Which You Want to Give Rent * </span> -->
                                     <select class="form-select" v-if="tanency_type == 'Shop'" name="tanency_type"
                                         aria-label="Default select example" required>
@@ -45,7 +49,8 @@
                                     <label> Which You Want to Give Rent* </label>
                                 </div>
                                 <!-- 1 -->
-                                <div class="form-group floating-group w-50 px-0 mx-0">
+
+                                <div class="form-group floating-group  col-lg-6">
                                     <!-- <span class="d_flex_between"> Enter Room/Flat or Shop Number*
                                         <i class="fa fa-info-circle px-2 info_btn" aria-hidden="true">
                                         </i>
@@ -67,94 +72,96 @@
                                     <AlphaNumeric></AlphaNumeric>
                                     <label> Enter Room/Flat or Shop Number* </label>
                                 </div>
-                            </div>
 
-                            <div class="d_flex">
+
+
                                 <!-- 2 -->
-                                <div class="form-group floating-group w-50 pe-lg-2 mx-0">
+                                <div class="form-group floating-group col-lg-6">
                                     <!-- <span> Enter Tenent Name* </span> -->
                                     <input type="text" v-model="TenentName" class="form-control " name="tenent_name"
                                         placeholder="" required>
                                     <label> Enter Tenent Name* </label>
                                 </div>
                                 <!-- 3 -->
-                                <div class="form-group floating-group w-50 px-0 mx-0">
+                                <div class="form-group floating-group col-lg-6">
                                     <input type="text" class="form-control no-spinners" maxlength="10" minlength="10"
                                         name="mob_number" placeholder="" required>
                                     <label> Tenent Mobile Number* </label>
                                 </div>
-                            </div>
-                            <div class="d_flex" v-if="totMembr">
+
+                                <div class="col-lg-6 d-flex" v-if="totMembr">
+                                    <!-- 4 -->
+                                    <div class="form-group floating-group  w-50 px-0 mx-0">
+                                        <input type="number" class="form-control no-spinners" min="1"
+                                            name="total_members" placeholder="">
+                                        <label> Total Members* </label>
+                                    </div>
+                                    <!-- 5 -->
+                                    <div class="form-group floating-group w-50 px-0 mx-0">
+                                        <select class="form-select " name="occupation"
+                                            aria-label="Default select example" required>
+                                            <option value="" selected hidden disabled> </option>
+                                            <option value="Govt.Job"> Govt. Job </option>
+                                            <option value="Privet Job"> Privet Job </option>
+                                            <option value="Bussiness"> Bussiness </option>
+                                            <option value="Self Employed"> Self Employed </option>
+                                        </select>
+                                        <label> Tenent Occupation </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 d-flex">
+                                    <!-- 6 -->
+                                    <div class="form-group floating-group  w-50 px-0 mx-0">
+                                        <!-- <span> Gender</span> -->
+                                        <select class="form-select" name="gender" aria-label="Default select example"
+                                            required>
+                                            <option value="" selected hidden disabled></option>
+                                            <option value="male"> Male </option>
+                                            <option value="female"> Female </option>
+                                        </select>
+                                        <label> Gender</label>
+                                    </div>
+                                    <!-- 7 -->
+                                    <div class="form-group floating-group w-50 px-0  mx-0">
+                                        <select class="form-select" name="idproof_type"
+                                            aria-label="Default select example" required>
+                                            <option value="" selected hidden disabled></option>
+                                            <option value="Adhaar"> Adhaar </option>
+                                            <option value="Voter ID"> Voter ID </option>
+                                            <option value="Driving License"> Driving License </option>
+                                        </select>
+                                        <label> ID Type* </label>
+                                    </div>
+                                </div>
                                 <!-- 4 -->
-                                <div class="form-group floating-group w-50 pe-lg-2 mx-0">
-                                    <input type="number" class="form-control no-spinners" min="1" name="total_members"
-                                        placeholder="">
-                                    <label> Total Members for This Room* </label>
-                                </div>
-                                <!-- 5 -->
-                                <div class="form-group floating-group w-50 pe-lg-2 mx-0">
-                                    <select class="form-select " name="occupation" aria-label="Default select example"
-                                        required>
-                                        <option value="" selected hidden disabled> </option>
-                                        <option value="Govt.Job"> Govt. Job </option>
-                                        <option value="Privet Job"> Privet Job </option>
-                                        <option value="Bussiness"> Bussiness </option>
-                                        <option value="Self Employed"> Self Employed </option>
-                                    </select>
-                                    <label> Tenent Occupation </label>
-                                </div>
-                            </div>
-
-                            <div class="d_flex">
-                                <!-- 6 -->
-                                <div class="form-group floating-group w-50 pe-lg-2 mx-0">
-                                    <!-- <span> Gender</span> -->
-                                    <select class="form-select" name="gender" aria-label="Default select example"
-                                        required>
-                                        <option value="" selected hidden disabled></option>
-                                        <option value="male"> Male </option>
-                                        <option value="female"> Female </option>
-                                    </select>
-                                    <label> Gender</label>
-                                </div>
-                                <!-- 7 -->
-                                <div class="form-group floating-group w-50  mx-0">
-                                    <select class="form-select" name="idproof_type" aria-label="Default select example"
-                                        required>
-                                        <option value="" selected hidden disabled></option>
-                                        <option value="Adhaar"> Adhaar </option>
-                                        <option value="Voter ID"> Voter ID </option>
-                                        <option value="Driving License"> Driving License </option>
-                                    </select>
-                                    <label> ID Type* </label>
-                                </div>
-                            </div>
-                            <!-- 4 -->
 
 
-                            <div class=" file_upload">
-                                <!-- Change ref="file" to ref="fileInput" to match the new script definition. -->
-                                <input type="file" ref="fileInput" accept="image/*" class="form-control w-75"
-                                    @change="previewImg($event)">
-                                <div class="w-25 p-2 bg-light rounded">
-                                    <img :src="img_url" class="preview_img" />
+                                <div class=" file_upload">
+                                    <!-- Change ref="file" to ref="fileInput" to match the new script definition. -->
+                                    <input type="file" ref="fileInput" accept="image/*" class="form-control w-75"
+                                        @change="previewImg($event)">
+                                    <div class="w-25 p-2 bg-light rounded">
+                                        <img :src="img_url" class="preview_img" />
+                                    </div>
+                                </div>
+
+                                <div v-if="requireMsg"
+                                    class="alert py-1 mt-2 alert-light text-danger  alert-dismissible">
+                                    Input field with <span class="text-dark "> * </span> sign can't be empty. <br>
+                                    File Uplod field can't be empty.
+                                    <button type="button" class="btn-close" @click="requireMsg = false"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="form-group  mt-3">
+                                    <button type="button" class="btn bg_purple text-light  round " @click="nextShow()">
+                                        Next &nbsp; <i class="fa fa-arrow-right text-light " aria-hidden="true"></i>
+                                    </button>
                                 </div>
                             </div>
-
-                            <div v-if="requireMsg" class="alert py-1 mt-2 alert-light text-danger  alert-dismissible">
-                                Input field with <span class="text-dark "> * </span> sign can't be empty. <br>
-                                File Uplod field can't be empty.
-                                <button type="button" class="btn-close" @click="requireMsg = false"
-                                    aria-label="Close"></button>
-                            </div>
-                            <div class="form-group  mt-3">
-                                <button type="button" class="btn bg_purple text-light  round " @click="nextShow()">
-                                    Next &nbsp; <i class="fa fa-arrow-right text-light " aria-hidden="true"></i>
-                                </button>
-                            </div>
-
 
                         </div>
+
 
                         <!-- =========== SECOND PART OF FORM ======== -->
 
@@ -201,12 +208,16 @@
 
 
                                     <div class="form-group d-flex align-items-center">
-                                        <input type="radio" id="s_amount1" name="s_amount" class="form-check-input "
+                                        <button type="button" class="btn btn-sm bg_purple text-white  round"
+                                            @click="securityAmt = false">No</button>
+                                        <button type="button" class="btn btn-sm bg_purple text-white mx-2 round"
+                                            @click="securityAmt = !false">Yes</button>
+                                        <!-- <input type="radio" id="s_amount1" name="s_amount" class="form-check-input "
                                             @click="securityAmt = false" /> <label for="s_amount1"
                                             class="px-2 me-2">No</label>
                                         <input type="radio" id="s_amount2" name="s_amount" class="form-check-input"
                                             checked @click="securityAmt = !false" /> <label for="s_amount2"
-                                            class="px-2">Yes</label>
+                                            class="px-2">Yes</label> -->
                                         <input type="number" name="security_amount" min="0"
                                             class="form-control no-spinners" placeholder="Enter Sucurity Amount"
                                             v-if="securityAmt">
@@ -216,12 +227,16 @@
                                 <div class="w-50 ">
                                     <p class="mb-0"> Do You Take Montly maintenence Charges? </p>
                                     <div class="form-group d-flex align-items-center">
-                                        <input type="radio" id="mentainChrg1" name="mentainChrg"
+                                        <button type="button" class="btn btn-sm bg_purple text-white  round"
+                                            @click="mentainChrg = ''">No</button>
+                                        <button type="button" class="btn btn-sm bg_purple text-white mx-2 round"
+                                            @click="mentainChrg = !''">Yes</button>
+                                        <!-- <input type="radio" id="mentainChrg1" name="mentainChrg"
                                             class="form-check-input " checked @click="mentainChrg = ''" /> <label
                                             for="mentainChrg1" class="px-2 me-2">No</label>
                                         <input type="radio" id="mentainChrg2" name="mentainChrg"
                                             class="form-check-input " @click="mentainChrg = !''" /> <label
-                                            for="mentainChrg2" class="px-2">Yes</label>
+                                            for="mentainChrg2" class="px-2">Yes</label> -->
                                         <input type="number" name="mantenece_charge" class="form-control no-spinners "
                                             placeholder="Enter Sucurity Amount" v-if="mentainChrg">
 

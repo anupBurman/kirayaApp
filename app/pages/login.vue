@@ -19,22 +19,21 @@
                 </div>
 
                 <form @submit.prevent="logIn">
-                    <div class="form-group floating-group">
-                        
-                        <input type="email" placeholder="" v-model="email" class="form-control" required>
+                    <div class="form-group">
                         <label>
                             <i class="fa fa-envelope" aria-hidden="true"></i>
-                           Enter Your Email*
+                            Enter Your Email*
                         </label>
+                        <input type="email" placeholder="" v-model="email" class="form-control" required>
                     </div>
-                    <div class="form-group floating-group">
-                        
+                    <div class="form-group ">
+                        <label>
+                            <i class="fa fa-unlock-alt" aria-hidden="true"></i>
+                            Enter Password*
+                        </label>
                         <input type="password" maxlength="12" minlength="6" v-model="password" class="form-control"
                             required placeholder="">
-                            <label>
-                            <i class="fa fa-unlock-alt" aria-hidden="true"></i>
-                           Enter Password*
-                        </label>
+
                     </div>
                     <div class="form-group text-secondary">
                         <input class="form-check-input me-1" type="checkbox" id="user_licence" v-model="userLicence" />
@@ -59,8 +58,8 @@
 
         <!-- Forgot Password Section -->
         <div class="row p-4 " v-if="forgotPass">
-            <h5> Enter Registered Email </h5>
-            <p> We will send password on your email id </p>
+            <h5 class="text-center"> Enter Registered Email </h5>
+            <p class="text-center"> We will send password on your email id </p>
 
             <div class="col-lg-4"></div>
             <div class="col-lg-4 text-start form p-4">
@@ -130,7 +129,7 @@ const logIn = async () => {
 
     try {
         //   Nuxt $fetch method
-        const data = await $fetch(store.apiBasePath +'user_login.php', {
+        const data = await $fetch(store.apiBasePath + 'user_login.php', {
             method: 'POST',
             body: {
                 email: email.value,
@@ -182,7 +181,7 @@ const forgotPassword = async () => {
 
     try {
         //  Nuxt $fetch method
-        const data2 = await $fetch( store.apiBasePath + 'forgot_password.ph', {
+        const data2 = await $fetch(store.apiBasePath + 'forgot_password.ph', {
             method: 'POST',
             body: {
                 email: email.value,
