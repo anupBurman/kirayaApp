@@ -183,6 +183,7 @@ const forgotPassword = async () => {
         //  Nuxt $fetch method
         const data2 = await $fetch('https://free.je/api/forgot_password.php', {
             method: 'POST',
+            responseType: 'json',
             body: {
                 email: email.value,
             }
