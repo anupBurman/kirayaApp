@@ -48,9 +48,11 @@
 div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-confirm) {
   border-radius: 50px !important;
 }
+
 div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-cancel) {
   border-radius: 50px !important;
 }
+
 div:where(.swal2-container) button:where(.swal2-styled) {
   padding: .325em 1.1em !important;
 }
@@ -84,6 +86,17 @@ h2 {
 .form-group .form-control {
   padding-bottom: .525rem;
   padding-top: .525rem;
+}
+
+.form-group .form-control:focus, .form-group .form-select:focus {
+  box-shadow: 0 0 0 .10rem rgba(13, 110, 253, .25);
+}
+.accordion-button:focus {
+  box-shadow: 0 0 0 .10rem rgba(13, 110, 253, .25);
+}
+.container-fluid h2:first-of-type {
+  margin-bottom: 0px;
+  margin-top: 0.5rem;
 }
 
 /* Chrome, Safari, Edge, Opera */

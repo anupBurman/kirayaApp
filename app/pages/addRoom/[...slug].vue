@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid template" style="background-image: url('/images/yyy.jpg');background-size: cover;">
-        <h2> Add Tenent Detail In {{ buildingName }} </h2>
+        <h2> Add Tenent Detail In {{ buildingName }}  </h2>
         <div class="row pb-5">
             <form id="form" @submit.prevent="fetchData($event)">
                 <div class="form-group ">
@@ -574,7 +574,7 @@ const postData = async (e) => {
                 text: res.message,
                 timer: 2000
             }).then(() => {
-                router.push('propertyDetails');
+                router.push('/myProperties/'+ rowId.value);
             });
         }
     } catch (error) {

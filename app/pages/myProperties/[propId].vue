@@ -2,7 +2,6 @@
   <div class="container">
     <div class="row py-4 d-flex justify-content-center">
       <div class="col-lg-12 mb-3">
-
         <!-- Accordion Section -->
         <div class="accordion accordion-flush" id="accordionFlushExample">
           <div class="accordion-item" v-for="(data, index) in prop" :key="index">
@@ -71,17 +70,21 @@
         <!-- ===== Rooms Section ===== -->
         <div class="p-3 bg-dark text-light text-start">
           Rooms/Flats - {{ room_countr }}
-          <NuxtLink v-if="AddRoom" :to="`/addRoom/${propId}/Room`" >
-            <button class="btn btn-sm bg_purple text-white mx-lg-4 round" >
+          <!-- this will show when no tenent data under this property (first time this will show) -->
+          <NuxtLink v-if="AddRoom" :to="`/addRoom/${propId}/Room`">
+            <button class="btn btn-sm bg_purple text-white mx-lg-4 round">
               <i class="bi bi-plus-square-dotted"></i> Add
             </button>
           </NuxtLink>
+          <!-- else this will show -->
           <button @click="addRoom" class="btn btn-sm bg_purple text-white mx-lg-4 round" v-else>
             <i class="bi bi-plus-square-dotted"></i> Add Room
           </button>
         </div>
 
         <div class="row">
+          
+          <h6 class="py-3" v-if="response2.length == 0 " > You Have Not Added Any Tanent in Rooms or Flats Yet.</h6>
           <div class=" col-lg-6 " v-for="(data, i) in response2" :key="i">
             <div class="text-start alert alert-warning p-3 d_flex">
               <NuxtLink :to="`/tenent_profile/${rowId}/${data.id}/${data.rent_start_date}`">
@@ -108,11 +111,13 @@
         <!-- ////  Shop section /// -->
         <div class="p-3 mt-5 bg-dark text-light text-start">
           Shops - {{ shop_countr }}
-          <NuxtLink   :to="`/addRoom/${propId}/Room`" v-if="AddShop">
+          <!-- this will show when no tenent data under this property (first time this will show) -->
+          <NuxtLink :to="`/addRoom/${propId}/Shop`" v-if="AddShop">
             <button class="btn btn-sm bg_purple text-white mx-lg-4 round">
               <i class="bi bi-plus-square-dotted"></i> Add Shops
             </button>
           </NuxtLink>
+          <!-- else this will show -->
           <button @click="addShop" class="btn btn-sm bg_purple text-white mx-lg-4 round" v-else>
             <i class="bi bi-plus-square-dotted"></i> Add Data in Shops
           </button>
@@ -246,12 +251,15 @@ const postData = async () => {
       method: 'POST',
       body: {}
     });
+    
     response2.value = Response2;
+   
 
     const Output = await $fetch(store.apiBasePath + 'tenent_shop_details.php?id=' + rowId.value, {
       method: 'POST',
       body: {}
     });
+    
     output.value = Output;
 
     // Rent reminder email logic

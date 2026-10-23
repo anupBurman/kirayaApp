@@ -1,9 +1,105 @@
 <template>
-  <div class="container-fluid">
+  <!-- <h3 class="py-3 text-center" v-if="payHistory" > Download this as PDF file Before Delete Tenent Record </h3> -->
+  <div class="container-fluid" v-if="payHistory" id="tbl">
     <!-- {{ response }} -->
-    <!-- {{ response2 }}  -->
+    <!-- {{ response2 }} -->
+    <div class="row px-lg-2 py-lg-4 pt-2 tbl_view">
+      <div class="col-3 ">
+        <h6>Tanent Name: {{ response.tenent_name }} </h6>
+        <h6> Room No: {{ response.room_id }} </h6>
+      </div>
+      <div class="col-3">
+        <h6> Rent Start Date: {{ response.rent_start_date }} </h6>
+        <h6> Mobile Number: {{ response.mob_number }} </h6>
+      </div>
+      <div class="col-3">
+        <h6> Occupation: {{ response.occupation }} </h6>
+        <h6> Tanency Type: {{ response.tanency_type }} </h6>
+      </div>
 
+      <div class="col-3">
+        <h6> Rent Mode: {{ response.rent_mode }} </h6>
+        <h6> Security Amount: {{ response.security_amount }} </h6>
+      </div>
+    </div>
+
+    <div style="overflow-x: auto;" tbl_view>
+      <table class="table mb-lg-2 table-secondary">
+
+        <tbody>
+          <tr v-for="(data, index) in response2" :key="index">
+            <td>
+              <h6>Bill Date</h6> <span> {{ dd }}-{{ mm }}-{{ yy }} </span>
+            </td>
+            <td>
+              <h6> Pre-Units</h6> <span> {{ data.last_reading }}</span>
+            </td>
+            <td>
+              <h6>Current-Units </h6> <span> {{ data.current_reading }} </span>
+            </td>
+            <td>
+              <h6>Rent </h6> <span> 5000 </span>
+            </td>
+            <td v-if="response.e_per_unit > 1">
+              <h6>Electricity Charge</h6> <span> {{ ((data.current_reading - data.last_reading) *
+                response.e_per_unit) }} </span>
+            </td>
+            <td v-if="response.e_fixed_monthly > 10">
+              <h6>Electricity Charge</h6> <span> {{ response.e_fixed_monthly }} </span>
+            </td>
+            <td v-if="response.bijli_bill === 'govt billing'">
+              <h6>Electricity Charge</h6> <span> {{ response.e_fixed_monthly }} </span>
+            </td>
+            <td>
+              <h6>Mantenece Charges</h6> <span> {{ response.mantenece_charge }} </span>
+            </td>
+            <td>
+              <h6> Total </h6>
+              <!-- <span> Total: </span> -->
+              <!-- IF ELECTRICITY CHARGES ACCORDING TO PER UNIT WISE then it will show -->
+              <span v-if="response.e_per_unit > 1">
+                {{ subTotal = parseInt(response.rent_amount) + ((data.current_reading -
+                  data.last_reading) *
+                  response.e_per_unit) + parseInt(response.mantenece_charge) }}
+
+              </span>
+
+              <!-- IF ELECTRICITY CHARGES BY GOVT. METER  -->
+              <span v-if="response.bijli_bill === 'govt billing'">
+                {{ subTotal = parseInt(response.e_fixed_monthly) + parseInt(response.rent_amount) +
+                  parseInt(response.mantenece_charge) }}
+              </span>
+
+              <span v-if="response.e_fixed_monthly > 10">
+                {{ subTotal = parseInt(response.e_fixed_monthly) + parseInt(data.recieved_amount) +
+                  parseInt(response.mantenece_charge) }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div v-if="!response2 || response2.length <= 0">
+      <h5 class="text-center  text-secondary py-5">
+        <i class="fa fa-arrow-circle-left  text-dark pe-4" aria-hidden="true" @click="showPayHistory"> Back </i>
+        No payment history found !
+      </h5>
+    </div>
+    <div v-else class="d_flex_between align-items-center action_icons">
+      <i class="fa fa-arrow-circle-left" aria-hidden="true" @click="showPayHistory"></i>
+      <div>
+        <i class="fa fa-file-pdf-o  text-danger " aria-hidden="true" @click="makePdf($event)"></i>
+        <i class="fa fa-download" aria-hidden="true" @click="makePdf($event)"></i>
+      </div>
+      <!-- <button type="button" class="btn btn-sm bg_purple text-white mx-lg-4 round" @click="showPayHistory">
+               <i class="fa fa-arrow-circle-left" aria-hidden="true"></i>
+            </button> -->
+    </div>
+  </div>
+
+  <div class="container-fluid " v-else>
     <div class="row px-lg-5 mb-5 profile_comp">
+
       <div class="py-3">
         <!-- Replaced router-link with NuxtLink -->
         <NuxtLink :to="`/ganrate_bill/${response.prop_id}/${response.id}/${monthh}`">
@@ -11,16 +107,21 @@
             Generate Bill
           </button>
         </NuxtLink>
+
+        <button type="button" class="btn bg_purple text-white mx-lg-4 round" @click="showPayHistory">
+          Payment History
+        </button>
       </div>
+
 
       <div class="col-lg-4 text-start alert alert-warning">
         <div class="d_flex_between">
           <div class="d-flex">
             <!-- <img src="/man.png" style="width: 50px;" alt="Tenant Avatar" /> -->
-            <div class="px-3">
-              <span>{{ response.tenent_name }} /</span> <span>Tenant id: {{ response.id }}</span>
+            <div class="px-2">
+              <span>{{ response.tenent_name }} /</span> Tanent id: <span> {{ response.id }}</span>
               <div>
-                <span>Room No: {{ response.room_id }}</span>
+                <span>Room No:</span> <span> {{ response.room_id }}</span>
               </div>
             </div>
           </div>
@@ -31,13 +132,13 @@
                 <div class="dropdown-item">
                   <!-- Replaced router-link with NuxtLink -->
                   <NuxtLink :to="`/edit_tenent/${response.id}`">
-                    <i class="fa fa-pencil-square pe-2" aria-hidden="true"></i> Edit Tenant Profile
+                    <i class="fa fa-pencil-square pe-2" aria-hidden="true"></i> Edit Tanent Profile
                   </NuxtLink>
                 </div>
               </li>
               <li>
                 <a class="dropdown-item" href="#" @click.prevent="deleteTenent()">
-                  <i class="fa fa-trash clr_orange pe-2" aria-hidden="true"></i> Delete Tenant
+                  <i class="fa fa-trash clr_orange pe-2" aria-hidden="true"></i> Delete Tanent
                 </a>
               </li>
               <li>
@@ -52,7 +153,7 @@
         <hr>
 
         <div class="d_flex_between">
-          <span>Maintenance: </span> <span>{{ response.mantenece_charge }}</span>
+          <span>Maintenance: </span> <span> {{ response.mantenece_charge }} </span>
         </div>
         <div class="d_flex_between">
           <span>Security Deposit: </span> <span>{{ response.security_amount }}</span>
@@ -97,7 +198,7 @@
       <div class="col-lg-8 text-start alert alert-default py-0 bg-light" id="tbl" v-for="(data, index) in response2"
         :key="index">
         <button type="button" class="btn btn-default outline_purple round mx-lg-4 my-2">
-          {{ dayy }}-{{ data.month }}-{{ Yearr }} To {{ dayy }}-{{ parseInt(data.month) + 1 }}-{{ Yearr }}
+          {{ dayy }}-{{ data.month }}-{{ Yearr }} <span class="text-danger">To </span>{{ dayy }}-{{ parseInt(data.month) + 1 }}-{{ Yearr }}
         </button>
         <div class="row alert alert-danger mb-0">
           <div class="col-3">
@@ -113,7 +214,7 @@
 
         <div class="row right_section py-3">
           <div class="col-3">
-            <h6 class="text_bold">Electricity</h6>
+            <h6 class="text_bold mb-0">Electricity</h6>
             <!-- Fixed math rendering (removed inline assignment variable) -->
             <h6 v-if="response.e_per_unit > 1">
               {{ data.current_reading - data.last_reading }} Units
@@ -127,14 +228,15 @@
             <h6 v-else>
               Charge Included in rent
             </h6>
-
-            <h6 class="text_bold">Current Reading</h6>
-            <h6>{{ data.current_reading }}</h6>
-            <h6>Date: {{ data.e_reading_date }}</h6>
-            <h6 class="text_bold">Charge per Unit</h6>
-            <h6>Rs. {{ response.e_per_unit }}</h6>
-            <h6 class="text_bold">Previous Reading</h6>
-            <h6>{{ data.last_reading }} Units</h6>
+            <div>
+              <h6 class="text_bold mb-0">Current Reading</h6>
+              <h6>{{ data.current_reading }}</h6>
+              <h6 v-if="response.e_per_unit > 1" class="text_bold mb-0">Date: {{ data.e_reading_date }} </h6>
+              <h6 class="text_bold mb-0 ">Charge per Unit</h6>
+              <h6>Rs. {{ response.e_per_unit }}</h6>
+              <h6 class="text_bold mb-0 ">Previous Reading</h6>
+              <h6>{{ data.last_reading }} Units</h6>
+            </div>
           </div>
 
           <div class="col-3">
@@ -212,7 +314,7 @@
 
           <div class="d_flex_between alert alert-success   text_bold">
             <div>
-              <span> Bill Date: </span> <span> {{ dd }}-0{{ mm }}-{{ yy }} </span>
+              <span> Bill Date: </span> <span> {{ dd }}-{{ mm }}-{{ yy }} </span>
             </div>
             <div>
               <span> Total </span>
@@ -221,7 +323,8 @@
               <!-- <span> Total: </span> -->
               <!-- IF ELECTRICITY CHARGES ACCORDING TO PER UNIT WISE then it will show -->
               <span v-if="response.e_per_unit > 1">
-                Rs. {{ subTotal = parseInt(response.rent_amount) + ((data.current_reading - data.last_reading) *
+                Rs. {{ subTotal = parseInt(response.rent_amount) + ((data.current_reading -
+                  data.last_reading) *
                   response.e_per_unit) + parseInt(response.mantenece_charge) }}
 
               </span>
@@ -289,10 +392,14 @@ const successAlert = ref(false)
 const errorAlert = ref(false)
 
 const subTotal = ref('')
+const payHistory = ref(false)
 
+
+const showPayHistory = () => {
+  payHistory.value == false ? payHistory.value = true : payHistory.value = false
+}
 
 // Methods rewritten as standard JavaScript functions
-
 const getTenentData = async () => {
   // Capture tenantId from current route parameters
   // const tId = route.params.tenentId
@@ -334,7 +441,7 @@ const getRentReceived = async () => {
   const startDate = route.params.slug[2]
   console.log(startDate)
   if (startDate) {
-    const [ddd, mmm, yyy] = startDate.split('-')
+    const [yyy, mmm, ddd] = startDate.split('-')
     dayy.value = ddd
     monthh.value = mmm
     Yearr.value = yyy
@@ -448,13 +555,19 @@ const makePdf = (evnt) => {
   const page = document.getElementById('tbl')
   if (page) {
     html2PDF(page, {
+      html2canvas: {
+        scale: 2,           // Increases the resolution/sharpness of the text
+        letterRendering: true
+      },
       jsPDF: {
         format: 'a4',
       },
       output: './pdf/generate.pdf'
     })
+
   }
 }
+
 
 // Replaces the Options API mounted() lifecycle hook
 onMounted(async () => {
@@ -465,6 +578,43 @@ onMounted(async () => {
 })
 </script>
 <style scoped>
+@media (max-width:567px) {
+  .action_icons i {
+    font-size: 1rem !important;
+  }
+
+  .tbl_view .col-3 h6 {
+    font-size: 9px !important;
+    margin-bottom: .1rem;
+  }
+
+  table tbody tr td h6 {
+    /* font-size: 9px !important; */
+    margin-bottom: .1rem;
+  }
+
+  /* h6+span {
+    font-size: 9px !important;
+  } */
+
+  .table>:not(caption)>*>* {
+    padding: .2rem .2rem;
+    line-height: normal;
+  }
+
+  .col-lg-4 div span:nth-of-type(2) {
+    font-weight: bold;
+  }
+
+  * {
+    font-size: 13px;
+  }
+
+  table.table {
+    margin-bottom: 5px;
+  }
+}
+
 .profile_comp {
   justify-content: end;
 }

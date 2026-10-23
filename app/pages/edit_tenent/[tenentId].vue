@@ -5,8 +5,8 @@
 
 
         <div class="row px-lg-5 px-2 pb-5">
-            <div class="form-group ">
-                <span class="loader-absolute" v-if="loader"></span>
+            <div class="form-group mb-0" >
+                <span class="loader-absolute " v-if="loader"></span>
             </div>
             <!-- <div v-if="successAlert" class="alert alert-success alert-dismissible ">
                 {{ successMessage }}

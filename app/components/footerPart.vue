@@ -4,20 +4,22 @@
       <li>
         <a @click="goBack" class="cursor-pointer">
           <i class="fa fa-arrow-circle-left" aria-hidden="true"></i>
-          <h6>Back</h6>
+          <!-- <h6>Back</h6> -->
         </a>
       </li>
       <li>
         <!-- NuxtLink replaces router-link -->
         <NuxtLink to="/">
-          <i class="bi bi-house-heart-fill"></i>
-          <h6>Home</h6>
+          <i class="fa fa-home" aria-hidden="true"></i>
+          <!-- <i class="bi bi-house-heart-fill"></i> -->
+          <!-- <h6>Home</h6> -->
         </NuxtLink>
       </li>
       <li>
         <NuxtLink to="/addProperty">
-          <i class="bi bi-plus-square-dotted"></i>
-          <h6>Add</h6>
+          <i class="fa fa-plus-circle" aria-hidden="true"></i>
+          <!-- <i class="bi bi-plus-square-dotted"></i> -->
+          <!-- <h6>Add</h6> -->
         </NuxtLink>
       </li>
     </ul>
@@ -81,6 +83,6 @@ onMounted(() => {
 }
 .footer ul li i {
   color: #ff944d;
-  font-size: 1rem;
+  font-size: 1.4rem;
 }
 </style>

@@ -14,7 +14,8 @@ export const useDataStore = defineStore('preData', {
         usermail: '',
 
         massage: "some Problem in Server",
-        apiBasePath: 'http://localhost/rental_app/api/',
+        // apiBasePath: 'http://localhost/rental_app/api/',
+        apiBasePath: 'https://rent.free.je/api/',
         loading: 'loading...',
         error: null,
 

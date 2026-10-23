@@ -38,7 +38,7 @@
                     <div class="form-group text-secondary">
                         <input class="form-check-input me-1" type="checkbox" id="user_licence" v-model="userLicence" />
                         End User
-                        <NuxtLink to="/terms_conditions">
+                        <NuxtLink to="/termsConditions">
                             <span class="text-dark"> License Agreement * </span>
                         </NuxtLink>
                     </div>

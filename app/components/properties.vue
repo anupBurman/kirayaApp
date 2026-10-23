@@ -65,7 +65,7 @@ const taburl = ref('/myProperties/');
 // Methods
 
 // DELETE ALL TENENT DATA
-const deleteTenent = () => {
+const deleteTenent = (propertyId) => {
     Swal.fire({
         title: "Are you sure?",
         text: "You won't be able to get data of this Property again!",
@@ -93,7 +93,7 @@ const deleteTenent = () => {
                 console.error("Something went wrong:", error);
                 Swal.fire({
                     icon: "error",
-                    text: 'Failed to delete the property.'
+                    text: error
                 });
             }
         }
@@ -103,7 +103,10 @@ const deleteTenent = () => {
 
 // Lifecycle Hooks (replacing mounted())
 onMounted(() => {
-    store.noProp ? router.push('/addProperty') : store.noProp = '';
+    setTimeout(() => {
+        store.noProp ? router.push('/addProperty') : store.noProp = '';
+    }, 500);
+
     // console.log(store.massage)
     // const localUser = localStorage.getItem("userinfo");
     // if (localUser) {
