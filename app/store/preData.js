@@ -42,7 +42,8 @@ export const useDataStore = defineStore('preData', {
             this.loader = true;
             try {
                 // $fetch automatically parses JSON and throws errors for non-2xx responses
-                const data = await $fetch('http://localhost/rental_app/api/my_properties.php', {
+                //'http://localhost/rental_app/api/my_properties.php'
+                const data = await $fetch(this.apiBasePath + 'my_properties.php', {
                     method: 'POST',
                     body: {
                         user_email: this.usermail,
